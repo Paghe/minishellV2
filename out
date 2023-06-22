@@ -1,0 +1,16 @@
+Makefile
+builtin
+control_commands
+execution
+include
+inf_loop.c
+input.txt
+lexer
+libft
+main.c
+main.o
+minishell
+out
+parse
+tests
+utils

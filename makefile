@@ -10,6 +10,7 @@ SRC = main.c \
 	utils/util.c \
 	builtin/echo.c \
 	builtin/cd.c \
+	builtin/cd_utils.c \
 	builtin/env.c \
 	builtin/pwd.c \
 	builtin/built.c \

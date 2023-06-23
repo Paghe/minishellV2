@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 17:04:46 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/22 17:07:31 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:27:53 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,43 @@ char	*go_home(char **env)
 		i++;
 	}
 	return (dir);
+}
+
+int	pwd_goes_void(char **env, t_cmds *cmds)
+{
+	char	*dir;
+	int		i;
+	int		is_void;
+
+	i = 1;
+	dir = NULL;
+	is_void = 0;
+	dir = getcwd(NULL, 0);
+	(void)env;
+	if (cmds[0].cmds[i] && !ft_strncmp(cmds[0].cmds[i], "/", ft_strlen("/")))
+	{
+		i++;
+		if (!(cmds[0].cmds[i]))
+			is_void = 1;
+		else if (!ft_strncmp(cmds[0].cmds[i], "/", ft_strlen("/")))
+			is_void = 1;
+	}
+	if (!dir || !is_void)
+		return (0);
+	free(dir);
+	dir = ft_strdup(cmds[0].cmds[1]);
+	if (chdir(dir) != 0)
+	{
+		perror(dir);
+		return (0);
+	}
+	else 
+	{
+		change_old(env);
+		change_current_pwd(env);
+		free(dir);
+		return (1);
+	}
+	free(dir);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 20:20:51 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/22 18:16:50 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:29:25 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,15 @@ int	cd_home(char **env, t_cmds *cmds)
 	return (0);
 }
 
-int	change_dir(char **env, t_cmds *cmds)
+int	change_dir_action(char **env, t_cmds *cmds)
 {
-	char	*dir;
 	int		i;
+	char	*dir;
 
 	i = 0;
-	if (cd_user(env, cmds))
-		return (1);
-	if (cd_home(env, cmds))
-		return (1);
-	if (!ft_strncmp(cmds[0].cmds[i], "cd", 2) && cmds[0].cmds[i + 1] && ft_strncmp(cmds[0].cmds[i + 1], "..", 3))
+	dir = NULL;
+	if (!ft_strncmp(cmds[0].cmds[i], "cd", 2) && cmds[0].cmds[i + 1] && \
+		ft_strncmp(cmds[0].cmds[i + 1], "..", 3))
 	{
 		change_old(env);
 		dir = get_path(cmds);
@@ -101,8 +99,18 @@ int	change_dir(char **env, t_cmds *cmds)
 		}
 		change_current_pwd(env);
 		free(dir);
+		return (1);
 	}
-	if (!ft_strncmp(cmds[0].cmds[i], "cd", 2) && cmds[0].cmds[i + 1] && !ft_strncmp(cmds[0].cmds[i + 1], "..", 3))
+	return (0);
+}
+
+int	go_back(char **env, t_cmds *cmds)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_strncmp(cmds[0].cmds[i], "cd", 2) && cmds[0].cmds[i + 1] && \
+			!ft_strncmp(cmds[0].cmds[i + 1], "..", 3))
 	{
 		change_old(env);
 		if (chdir("..") != 0)
@@ -111,6 +119,26 @@ int	change_dir(char **env, t_cmds *cmds)
 			return (0);
 		}
 		change_current_pwd(env);
+		return (1);
 	}
-	return (1);
+	return (0);
+}
+
+int	change_dir(char **env, t_cmds *cmds)
+{
+	if (!ft_strncmp(cmds->cmds[0], "cd", 3))
+	{
+		no_quote(cmds);
+		if (pwd_goes_void(env, cmds))
+			return (1);
+		if (cd_user(env, cmds))
+			return (1);
+		if (cd_home(env, cmds))
+			return (1);
+		if (change_dir_action(env, cmds))
+			return (1);
+		if (go_back(env, cmds))
+			return (1);
+	}
+	return (0);
 }

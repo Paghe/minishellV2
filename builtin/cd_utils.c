@@ -39,6 +39,7 @@ char	*get_path(t_cmds *cmds)
 	char	*path;
 	char	*dir;
 
+	dir = NULL;
 	path = getcwd(NULL, 0);
 	tmp = ft_strjoin(path, "/");
 	if (cmds[0].cmds[1][0] == '/')

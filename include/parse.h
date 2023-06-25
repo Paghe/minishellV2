@@ -14,6 +14,8 @@
 # define PARSE_H
 
 # include "lexer.h"
+//  #include <sys/types.h>
+//   #include <sys/wait.h>
 
 # define READ_END 0
 # define WRITE_END 1
@@ -75,4 +77,5 @@ int		get_env(t_cmds *cmds, char **env);
 int		build_pwd(t_cmds *cmds);
 int		pwd_goes_void(char **env, t_cmds *cmds);
 int		count_env_vars(char **envp);
+void	export(char **cmds, char ***env, char ***shell_env);
 #endif

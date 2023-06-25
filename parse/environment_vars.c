@@ -17,12 +17,10 @@ int	is_env_var(char *word, char	**var_name, char **value)
 {
 	char	*after_eq;
 	int		index_bef_eq;
-	int		i;
 
 	after_eq = ft_strchr(word, '=');
 	if (after_eq)
 	{
-		i = 0;
 		index_bef_eq = after_eq - word;
 		(*var_name) = (char *)malloc(sizeof(char) * index_bef_eq + 2);
 		(*value) = (char *)malloc(sizeof(char) * ft_strlen(word) - index_bef_eq - 1);

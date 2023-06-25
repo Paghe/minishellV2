@@ -31,6 +31,7 @@ SRC = main.c \
 OBJ = $(SRC:.c=.o)
 
 LIBFT = ./libft/libft.a
+GNL = ./gnl/libgnl.a
 
 LINKFLAGS = -lreadline #-L$(shell brew --prefix readline)/lib #-L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++
 
@@ -42,10 +43,11 @@ all:
 
 $(NAME): $(OBJ) include/lexer.h
 	make -C libft
-	gcc  $(OBJ) $(LIBFT) $(FLAGS) -o $(NAME) $(LINKFLAGS)
+	gcc  $(OBJ) $(LIBFT) $(GNL) $(FLAGS) -o $(NAME)
 clean:
 	rm -f $(OBJ)
 	make clean -C libft
+	make clean -C gnl
 
 fclean:
 	make clean

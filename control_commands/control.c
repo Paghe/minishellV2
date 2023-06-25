@@ -27,9 +27,9 @@ void	cntr_handler(int signum)
 	slash_handler(signum);
 	if (signum == SIGINT)
 		write(1, "\n", 1);
-	rl_on_new_line();
-	// rl_replace_line("", 0);
-	rl_redisplay();
+	// rl_on_new_line();
+	// // rl_replace_line("", 0);
+	// rl_redisplay();
 }
 
 void	slash_handler(int signum)
@@ -46,9 +46,9 @@ void	signal_reset_prompt(int signo)
 {
 	(void)signo;
 	write(1, "\n", 1);
-	rl_on_new_line();
-	// rl_replace_line("", 0);
-	rl_redisplay();
+	// rl_on_new_line();
+	// // rl_replace_line("", 0);
+	// rl_redisplay();
 }
 
 /* set_signals_interactive:
@@ -74,7 +74,7 @@ void	set_signals_interactive(void)
 void	signal_print_newline(int signal)
 {
 	(void)signal;
-	rl_on_new_line();
+	// rl_on_new_line();
 }
 void	set_signals_noninteractive(void)
 {

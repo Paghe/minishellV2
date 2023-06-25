@@ -96,10 +96,12 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 {
 	char	**new_envp;
 	int		i;
+	int		j;
 	int		count;
 	char	*temp;
 
 	i = 0;
+	j = 0;
 	count = count_env_vars(*envp);
 	if (is_inside_env(*envp, var_name))
 		new_envp = (char **)malloc(sizeof(char *) * (count + 2));
@@ -112,15 +114,18 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 		new_envp[i] = ft_strdup((*envp)[i]);
 		free((*envp)[i]);
 		i++;
+		j++;
 	}
 	if (is_inside_env(*envp, var_name))
 	{
-		i = get_env_index(*envp, var_name);
-		free(new_envp[i]);
+		j = get_env_index(*envp, var_name);
+		free(new_envp[j]);
 	}
 	temp = ft_strjoin(var_name, "=");
-	new_envp[i] = ft_strjoin(temp, value);
+	new_envp[j] = ft_strjoin(temp, value);
 	free(temp);
+	if (i == j)
+		i++;
 	i++;
 	new_envp[i] = NULL;
 	free(*envp);

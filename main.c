@@ -12,6 +12,7 @@
 
 #include "include/control.h"
 #include "include/parse.h"
+#include "gnl/get_next_line.h"
 
 void leaks(void)
 {
@@ -109,7 +110,10 @@ int execute(char **envp, int *exit_code)
 	while (1)
 	{
 		clear_line();
-		input = readline("minishell 🚀 ");
+		// if (isatty(STDIN_FILENO))
+			// input = readline("minishell 🚀 ");
+		// else
+			input = get_next_line(STDIN_FILENO);
 		if (!input)
 		{
 			exec_code = -1;
@@ -120,7 +124,7 @@ int execute(char **envp, int *exit_code)
 			free(input);
 			continue;
 		}
-		add_history(input);
+		// add_history(input);
 		parsing(&lexer, ft_strdup(input));
 		free(input);
 		if (!get_grammar(lexer.tokens))

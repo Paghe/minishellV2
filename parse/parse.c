@@ -108,6 +108,8 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 		}
 		else if (is_output_redirect(current))
 		{
+			if (current->type == DMORE)
+				cmds[i]->data.is_append = 1;
 			if (current->next && is_the_word(current->next))
 			{
 				if (cmds[i]->data.output)
@@ -145,21 +147,25 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	int		dollars;
 
 	i = 0;
-	j = 0;
+	printf("hello from replace func\n");
 	while (cmds[i])
 	{
+		j = 0;
 		while (cmds[i]->cmds[j])
 		{
 			arg = cmds[i]->cmds[j];
 			dollars = count_dollars(arg);
 			if ((arg = ft_strrchr(arg, '$')) && dollars % 2 != 0)
 			{
+				printf("entering replace func\n");
 				value = get_env_var(arg + 1, envp);
 				arg = (char *)malloc(sizeof(char) * (dollars + 1));
 				ft_strlcat(arg, cmds[i]->cmds[j], dollars);
 				value = ft_strjoin(arg, value);
+				printf("before free\n");
 				free(arg);
 				free(cmds[i]->cmds[j]);
+				printf("after free\n");
 				cmds[i]->cmds[j] = ft_strdup(value);
 				free(value);
 			}

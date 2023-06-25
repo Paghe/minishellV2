@@ -1,5 +1,5 @@
 FLAGS = -Wall -Wextra -Werror #-I $(shell brew --prefix readline)/include
-#FLAGS += -g -fsanitize=address 
+FLAGS += -g -fsanitize=address 
 
 NAME = minishell
 

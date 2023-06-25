@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/25 14:47:47 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 16:40:54 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int execute(char **envp, int *exit_code)
 			break;
 	}
 	free_env(shell_env);
-	/* 	free_env(envp); */
+		free_env(envp);
 	return (exec_code);
 }
 
@@ -153,7 +153,7 @@ int	main(int argc, char **argv, char **envp)
 	env_vars = copy_env(envp);
 	(void)argc;
 	(void)argv;
-	if ((code = execute(env_vars, &exit_code)) == -1)
+	if ((code = execute(envp, &exit_code)) == -1)
 	{
 		free_env(env_vars);
 		return (-1);

@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 17:04:46 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/23 16:27:53 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 16:21:24 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ int	pwd_goes_void(char **env, t_cmds *cmds)
 	dir = NULL;
 	is_void = 0;
 	dir = getcwd(NULL, 0);
-	(void)env;
 	if (cmds[0].cmds[i] && !ft_strncmp(cmds[0].cmds[i], "/", ft_strlen("/")))
 	{
 		i++;

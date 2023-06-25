@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:15:04 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/21 20:13:32 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 16:34:03 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	built_in(t_cmds *cmds, char **env)
 	int	flag;
 
 	flag = 0;
-	(void)env;
 	if (echo(cmds))
 		flag = 1;
 	if (change_dir(env, cmds))

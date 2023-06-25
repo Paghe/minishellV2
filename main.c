@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/21 21:20:56 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 14:47:47 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,9 @@ char **copy_env(char **envp)
 
 void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int *exit_code, int n_commands)
 {
-	int i;
-	char *var_name;
-	char *value;
+	int		i;
+	char	*var_name;
+	char	*value;
 	(void)n_commands;
 	i = 0;
 	var_name = NULL;
@@ -70,9 +70,8 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int *exit_code
 		if (ft_strncmp(cmds[i]->cmds[0], "exit", 4) == 0)
 		{
 			*exit_code = -1;
-			return;
+			return ;
 		}
-
 		if (ft_strncmp(cmds[i]->cmds[0], "export", 6) == 0)
 			export(cmds[i]->cmds, envp, shell_env);
 		else if (ft_strncmp(cmds[i]->cmds[0], "unset", 5) == 0)

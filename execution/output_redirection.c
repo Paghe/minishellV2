@@ -27,13 +27,9 @@ void	output_redirection_renew(t_cmds **red, char **envp)
 		dup2(fd, STDOUT_FILENO);
 		if ((*red)->data.fd_in != -1)
 		{
-			printf("christina\n");
-			printf("fd_out: %d\n", fd);
-			printf("fd_in: %d\n", (*red)->data.fd_in);
 			dup2((*red)->data.fd_in, STDIN_FILENO);
 			close((*red)->data.fd_in);
 		}
-		printf("fd_in: %d\n", (*red)->data.fd_in);
 		execve((char const *)(*red)->data.env, (*red)->cmds, envp);
 	}
 	waitpid(pid, NULL, 0);

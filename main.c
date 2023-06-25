@@ -111,9 +111,9 @@ int execute(char **envp, int *exit_code)
 	{
 		clear_line();
 		// if (isatty(STDIN_FILENO))
-			// input = readline("minishell 🚀 ");
+			input = readline("minishell 🚀 ");
 		// else
-			input = get_next_line(STDIN_FILENO);
+			// input = get_next_line(STDIN_FILENO);
 		if (!input)
 		{
 			exec_code = -1;
@@ -124,7 +124,7 @@ int execute(char **envp, int *exit_code)
 			free(input);
 			continue;
 		}
-		// add_history(input);
+		add_history(input);
 		parsing(&lexer, ft_strdup(input));
 		free(input);
 		if (!get_grammar(lexer.tokens))
@@ -135,6 +135,7 @@ int execute(char **envp, int *exit_code)
 		cmds = init_list_commands(lexer.tokens);
 		parse_tokens(lexer.tokens, cmds, envp);
 		replace_env_vars(cmds, envp);
+		replace_env_vars(cmds, shell_env);
 		execute_cmds(cmds, &envp, &shell_env, exit_code, count_commands(lexer.tokens));
 		destroy_tokens(lexer.tokens);
 		free_parse(cmds);

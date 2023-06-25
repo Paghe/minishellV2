@@ -80,4 +80,5 @@ int		build_pwd(t_cmds *cmds);
 int		pwd_goes_void(char **env, t_cmds *cmds);
 int		count_env_vars(char **envp);
 void	export(char **cmds, char ***env, char ***shell_env);
+char	*ft_strdup2(const char *s1, int stop);
 #endif

@@ -112,15 +112,12 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 	while (i < count)
 	{
 		new_envp[i] = ft_strdup((*envp)[i]);
-		free((*envp)[i]);
+		// free((*envp)[i]);
 		i++;
 		j++;
 	}
 	if (is_inside_env(*envp, var_name))
-	{
 		j = get_env_index(*envp, var_name);
-		free(new_envp[j]);
-	}
 	temp = ft_strjoin(var_name, "=");
 	new_envp[j] = ft_strjoin(temp, value);
 	free(temp);
@@ -128,6 +125,9 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 		i++;
 	i++;
 	new_envp[i] = NULL;
+	// i = -1;
+	// while((*envp)[++i])
+	// 	free((*envp)[i]);
 	free(*envp);
 	*envp = new_envp;
 	return (1);
@@ -145,5 +145,5 @@ char	*get_env_var(char *var_name, char **envp)
 			return (ft_strrchr(envp[i], '=') + 1);
 		i++;
 	}
-	return ("");
+	return (NULL);
 }

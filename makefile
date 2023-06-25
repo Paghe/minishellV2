@@ -43,7 +43,7 @@ all:
 
 $(NAME): $(OBJ) include/lexer.h
 	make -C libft
-	gcc  $(OBJ) $(LIBFT) $(GNL) $(FLAGS) -o $(NAME)
+	gcc  $(OBJ) $(LIBFT) $(GNL) $(FLAGS) -o $(NAME) $(LINKFLAGS)
 clean:
 	rm -f $(OBJ)
 	make clean -C libft

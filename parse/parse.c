@@ -88,7 +88,6 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 	j = 0;
 	while (current)
 	{
-		//printf("token: %s type %i is env var: %i\n", current->token, current->type, is_env_var(current->token, var_name, value));
 		if (current->type == PIPE)
 		{
 			init_pipes(cmds, i);
@@ -147,7 +146,6 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	int		dollars;
 
 	i = 0;
-	printf("hello from replace func\n");
 	while (cmds[i])
 	{
 		j = 0;
@@ -157,15 +155,13 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 			dollars = count_dollars(arg);
 			if ((arg = ft_strrchr(arg, '$')) && dollars % 2 != 0)
 			{
-				printf("entering replace func\n");
 				value = get_env_var(arg + 1, envp);
-				arg = (char *)malloc(sizeof(char) * (dollars + 1));
-				ft_strlcat(arg, cmds[i]->cmds[j], dollars);
+				if (!value)
+					break ;
+				arg = ft_strdup2(cmds[i]->cmds[j], dollars - 1);
 				value = ft_strjoin(arg, value);
-				printf("before free\n");
 				free(arg);
 				free(cmds[i]->cmds[j]);
-				printf("after free\n");
 				cmds[i]->cmds[j] = ft_strdup(value);
 				free(value);
 			}

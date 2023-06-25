@@ -37,10 +37,10 @@ void	close_all(t_cmds **cmds)
 			close(cmds[i]->data.pipe_in);
 		if (cmds[i]->data.pipe_out != -1)
 			close(cmds[i]->data.pipe_out);
-		if (cmds[i]->data.fd_in != -1)
-			printf("fd in: %i\n", cmds[i]->data.fd_in);
-		if (cmds[i]->data.fd_out != -1)
-			printf("fd out: %i\n", cmds[i]->data.fd_out);
+		// if (cmds[i]->data.fd_in != -1)
+		// 	printf("fd in: %i\n", cmds[i]->data.fd_in);
+		// if (cmds[i]->data.fd_out != -1)
+		// 	printf("fd out: %i\n", cmds[i]->data.fd_out);
 		i++;
 	}
 }
@@ -70,6 +70,7 @@ void	pipe_proccess(t_cmds **red, char **envp, t_cmds **all , int n_commands)
     if (if_is_builtin((*red)->cmds[0]))
     {
       built_in(*red, envp);
+	  printf("\n");
 			exit(0);
     }
     else

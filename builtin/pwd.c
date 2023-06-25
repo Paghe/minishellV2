@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:10:29 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/25 16:36:33 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 17:54:34 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,12 @@
 int	build_pwd(t_cmds *cmds)
 {
 	char	*pwd;
-
-	if (!ft_strncmp(cmds[0].cmds[0], "pwd", 4))
+	char	*check_format;	
+	
+	check_format = escape_quote(cmds[0].cmds[0]);
+	if (!ft_strncmp(check_format, "pwd", 4))
 	{
+		free(check_format);
 		pwd = getcwd(NULL, 0);
 		if (!pwd)
 		{
@@ -37,5 +40,6 @@ int	build_pwd(t_cmds *cmds)
 			return (1);
 		}
 	}
+	free(check_format);
 	return (0);
 }

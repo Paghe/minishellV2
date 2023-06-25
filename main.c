@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/25 16:40:54 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 16:51:16 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,8 @@ int execute(char **envp, int *exit_code)
 		if (*exit_code == -1)
 			break;
 	}
-	free_env(shell_env);
-		free_env(envp);
+	/* free_env(shell_env); */
+/* 		free_env(envp); */
 	return (exec_code);
 }
 

@@ -69,9 +69,8 @@ void	pipe_proccess(t_cmds **red, char **envp, t_cmds **all , int n_commands)
 	{
     if (if_is_builtin((*red)->cmds[0]))
     {
-      built_in(*red, envp);
-	  printf("\n");
-			exit(0);
+    	built_in(*red, envp);
+		exit(0);
     }
     else
     {

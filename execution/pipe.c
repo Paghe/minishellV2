@@ -45,14 +45,14 @@ void	close_all(t_cmds **cmds)
 	}
 }
 
-void	pipe_proccess(t_cmds **red, char **envp, t_cmds **all , int n_commands)
+void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env)
 {
 	int	pid;
 
 	(void)all;
 	if (if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
 	{
-		built_in(*red, envp);
+		built_in(*red, envp, shell_env);
 		if ((*red)->data.pipe_in != -1)
 			close((*red)->data.pipe_in);
 		if ((*red)->data.pipe_out != -1)
@@ -69,7 +69,7 @@ void	pipe_proccess(t_cmds **red, char **envp, t_cmds **all , int n_commands)
 	{
     if (if_is_builtin((*red)->cmds[0]))
     {
-    	built_in(*red, envp);
+    	built_in(*red, envp, shell_env);
 		exit(0);
     }
     else
@@ -93,12 +93,12 @@ void	pipe_proccess(t_cmds **red, char **envp, t_cmds **all , int n_commands)
 		  (*red)->cmds = escape_quotes_cmds((*red)->cmds);
 			if (ft_strncmp((*red)->cmds[0], "./", 2) == 0)
 			{
-				if (execve((*red)->cmds[0], (*red)->cmds, envp) == -1)
+				if (execve((*red)->cmds[0], (*red)->cmds, *envp) == -1)
 					exit(-1);
 			}
 			else
 			{
-				if (execve((char const *)(*red)->data.env, (*red)->cmds, envp) == -1)
+				if (execve((char const *)(*red)->data.env, (*red)->cmds, *envp) == -1)
 					exit(-1);
 			}
 		}

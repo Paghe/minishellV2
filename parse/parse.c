@@ -155,15 +155,21 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 			dollars = count_dollars(arg);
 			if ((arg = ft_strrchr(arg, '$')) && dollars % 2 != 0)
 			{
-				value = get_env_var(arg + 1, envp);
+				if (*(arg + 1) == '?')
+					value = ft_itoa(EXIT_C);
+				else
+					value = get_env_var(arg + 1, envp);
 				if (!value)
-					break ;
-				arg = ft_strdup2(cmds[i]->cmds[j], dollars - 1);
-				value = ft_strjoin(arg, value);
-				free(arg);
-				free(cmds[i]->cmds[j]);
-				cmds[i]->cmds[j] = ft_strdup(value);
-				free(value);
+					cmds[i]->cmds[j] = ft_strdup("");
+				else
+				{
+					arg = ft_strdup2(cmds[i]->cmds[j], dollars - 1);
+					value = ft_strjoin(arg, value);
+					free(arg);
+					free(cmds[i]->cmds[j]);
+					cmds[i]->cmds[j] = ft_strdup(value);
+					free(value);
+				}
 			}
 			j++;
 		}

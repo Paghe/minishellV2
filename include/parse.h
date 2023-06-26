@@ -21,6 +21,8 @@
 # define READ_END 0
 # define WRITE_END 1
 
+extern int EXIT_C;
+
 typedef struct s_data
 {
 	char		*env;
@@ -58,7 +60,7 @@ void	redirect_io(int input, int output);
 int		begin_with_pipes(t_token *token);
 int		init_pipes(t_cmds **cmds, int index);
 void	close_all(t_cmds **cmds);
-void	pipe_proccess(t_cmds **red, char **envp, t_cmds **all , int n_commands);
+void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env);
 int		is_env_var(char *word, char	**var_name, char **value);
 char	*get_env_var(char *var_name, char **envp);
 void	replace_env_vars(t_cmds **cmds, char **envp);
@@ -68,7 +70,7 @@ int		unset(char ***envp, char *var_name);
 void	print_env(char **envp);
 int		set_env_var(char ***envp, char	*var_name, char *value);
 void	free_env(char **envp);
-int		built_in(t_cmds *cmds, char **env);
+int		built_in(t_cmds *cmds, char ***env, char ***shell_envp);
 int		echo(t_cmds *cmds);
 int		change_dir(char **env, t_cmds *cmds);
 void	change_old(char **env);

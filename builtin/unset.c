@@ -85,8 +85,8 @@ int	get_env_index(char	**envp, char	*var_name)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0)
-			return (i);
+		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && ft_strncmp(envp[i] + ft_strlen(var_name), "=", 1) == 0)
+			return (i + 1);
 		i++;
 	}
 	return (i);
@@ -145,8 +145,8 @@ char	*get_env_var(char *var_name, char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0)
-			return (ft_strrchr(envp[i], '=') + 1);
+		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && ft_strncmp(envp[i] + ft_strlen(var_name), "=", 1) == 0)
+			return (ft_strchr(envp[i], '=') + 1);
 		i++;
 	}
 	return (NULL);

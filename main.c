@@ -15,6 +15,7 @@
 #include "gnl/get_next_line.h"
 
 extern char **environ;
+int EXIT_C;
 
 void leaks(void)
 {
@@ -76,21 +77,19 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int *exit_code
 			*exit_code = -1;
 			return ;
 		}
-		if (ft_strncmp(cmds[i]->cmds[0], "export", 6) == 0)
-			export(cmds[i]->cmds, envp, shell_env);
 		else if (ft_strncmp(cmds[i]->cmds[0], "unset", 5) == 0)
 		{
 			unset(envp, cmds[i]->cmds[1]);
 			unset(shell_env, cmds[i]->cmds[1]);
 		}
-		else if (is_env_var(cmds[i]->cmds[0], &var_name, &value))
+		else if (is_env_var(cmds[i]->cmds[0], &var_name, &value) == 1)
 		{
 			set_env_var(shell_env, var_name, value);
 			free(var_name);
 			free(value);
 		}
 		else
-			pipe_proccess(&cmds[i], *envp, cmds, n_commands);
+			pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
 		if (cmds[i]->data.env)
 			free(cmds[i]->data.env);
 		i++;
@@ -158,6 +157,7 @@ int	main(int argc, char **argv, char **envp)
 
 	errno = 0;
 	exit_code = 0;
+	EXIT_C = 0;
 	env_vars = copy_env(envp);
 	(void)argc;
 	(void)argv;

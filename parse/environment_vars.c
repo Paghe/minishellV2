@@ -42,27 +42,18 @@ int	is_env_var(char *word, char	**var_name, char **value)
 	char	*after_eq;
 	int		index_bef_eq;
 
+	if (*word == '?' || *(ft_strtrim(word, "\'\"")) == '=')
+		return (0);
 	after_eq = ft_strchr(word, '=');
 	if (after_eq)
 	{
 		index_bef_eq = after_eq - word;
-		(*value) = ft_strdup(after_eq + 1);
+		(*value) = ft_strtrim((after_eq + 1), "\'\"");
 		(*var_name) = ft_strdup2(word, index_bef_eq);
 		return (1);
 	}
-	return (0);
+	return (-1);
 }
-
-//char	*get_env_var(char *var_name)
-//{
-//	char	*value;
-
-//	value = getenv(var_name);
-//	if (value)
-//		return (value);
-//	value = "";
-//	return (value);
-//}
 
 int	count_dollars(char *word)
 {
@@ -87,10 +78,11 @@ void	free_env(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i] != NULL)
+	while (envp && envp[i] != NULL)
 	{
 		free(envp[i]);
 		i++;
 	}
-	free(envp);
+	if (envp)
+		free(envp);
 }

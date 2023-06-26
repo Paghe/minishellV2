@@ -36,19 +36,26 @@ int	if_is_builtin(char *cmd)
 		return (free(check_format), 1);
 	if (!ft_strncmp(check_format, "unset", 6))
 		return (free(check_format), 1);
+	if (!ft_memcmp(check_format, "export", 7))
+		return (free(check_format), 1);
 	return (free(check_format), 0);
 }
 
-int	built_in(t_cmds *cmds, char **env)
+int	built_in(t_cmds *cmds, char ***env, char ***shell_envp)
 {
 	int	flag;
 
 	flag = 0;
+	if (ft_memcmp(cmds->cmds[0], "export", 6) == 0)
+	{
+		export(cmds->cmds, env, shell_envp);
+		flag = 1;
+	}
 	if (echo(cmds))
 		flag = 1;
-	if (change_dir(env, cmds))
+	if (change_dir(*env, cmds))
 		flag = 1;
-	if (get_env(cmds, env))
+	if (get_env(cmds, *env))
 		flag = 1;
 	if (build_pwd(cmds))
 		flag = 1;

@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 20:53:59 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/21 17:21:09 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 17:50:47 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,5 @@ void		def_type_tok(t_token *token);
 void		print_token_type(t_token_type type);
 void		print_token(t_tokens *tokens);
 char		format_is_symbol(char symbol);
-int			if_is_builtin(char *cmd);
 
 #endif

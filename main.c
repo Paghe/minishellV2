@@ -161,7 +161,7 @@ int	main(int argc, char **argv, char **envp)
 	env_vars = copy_env(envp);
 	(void)argc;
 	(void)argv;
-	if ((code = execute(envp, &exit_code)) == -1)
+	if ((code = execute(env_vars, &exit_code)) == -1)
 		return (-1);
 	return (0);
 }

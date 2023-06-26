@@ -36,7 +36,7 @@ void	input_redirection(t_cmds **red, char **envp)
 			exit(-1);
 	}
 	waitpid(pid, NULL, 0);
-	printf("\n");
+	// printf("\n");
 	(*red)->data.fd_in = fd;
 	//cntr_handler(SIGINT);
 }

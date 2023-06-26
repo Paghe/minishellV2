@@ -88,7 +88,6 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 	j = 0;
 	while (current)
 	{
-		//printf("token: %s type %i is env var: %i\n", current->token, current->type, is_env_var(current->token, var_name, value));
 		if (current->type == PIPE)
 		{
 			init_pipes(cmds, i);
@@ -108,6 +107,8 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 		}
 		else if (is_output_redirect(current))
 		{
+			if (current->type == DMORE)
+				cmds[i]->data.is_append = 1;
 			if (current->next && is_the_word(current->next))
 			{
 				if (cmds[i]->data.output)
@@ -145,23 +146,30 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	int		dollars;
 
 	i = 0;
-	j = 0;
 	while (cmds[i])
 	{
+		j = 0;
 		while (cmds[i]->cmds[j])
 		{
 			arg = cmds[i]->cmds[j];
 			dollars = count_dollars(arg);
 			if ((arg = ft_strrchr(arg, '$')) && dollars % 2 != 0)
 			{
-				value = get_env_var(arg + 1, envp);
-				arg = (char *)malloc(sizeof(char) * (dollars + 1));
-				ft_strlcat(arg, cmds[i]->cmds[j], dollars);
-				value = ft_strjoin(arg, value);
-				free(arg);
-				free(cmds[i]->cmds[j]);
-				cmds[i]->cmds[j] = ft_strdup(value);
-				free(value);
+				if (*(arg + 1) == '?')
+					value = ft_itoa(EXIT_C);
+				else
+					value = get_env_var(arg + 1, envp);
+				if (!value)
+					cmds[i]->cmds[j] = ft_strdup("");
+				else
+				{
+					arg = ft_strdup2(cmds[i]->cmds[j], dollars - 1);
+					value = ft_strjoin(arg, value);
+					free(arg);
+					free(cmds[i]->cmds[j]);
+					cmds[i]->cmds[j] = ft_strdup(value);
+					free(value);
+				}
 			}
 			j++;
 		}

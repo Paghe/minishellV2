@@ -13,36 +13,47 @@
 #include "../include/parse.h"
 #include "../include/control.h"
 
+extern char **environ;
+
+char	*ft_strdup2(const char *s1, int stop)
+{
+	char	*s2;
+	int		len;
+	int		i;
+
+	i = 0;
+	len = ft_strlen(s1);
+	if (!s1)
+		return (0);
+	s2 = malloc(sizeof (char) * len + 1);
+	if (!s2)
+		return (NULL);
+	while (s1[i] != '\0' && i < stop)
+	{
+		s2[i] = s1[i];
+		i++;
+	}
+	s2[i] = '\0';
+	return (s2);
+}
+
 int	is_env_var(char *word, char	**var_name, char **value)
 {
 	char	*after_eq;
 	int		index_bef_eq;
-	int		i;
 
+	if (*word == '?' || *(ft_strtrim(word, "\'\"")) == '=')
+		return (0);
 	after_eq = ft_strchr(word, '=');
 	if (after_eq)
 	{
-		i = 0;
 		index_bef_eq = after_eq - word;
-		(*var_name) = (char *)malloc(sizeof(char) * index_bef_eq + 2);
-		(*value) = (char *)malloc(sizeof(char) * ft_strlen(word) - index_bef_eq - 1);
-		ft_strlcat((*var_name), word, index_bef_eq + 1);
-		ft_strlcat((*value), after_eq + 2, ft_strlen(word) - index_bef_eq - 2);
+		(*value) = ft_strtrim((after_eq + 1), "\'\"");
+		(*var_name) = ft_strdup2(word, index_bef_eq);
 		return (1);
 	}
-	return (0);
+	return (-1);
 }
-
-//char	*get_env_var(char *var_name)
-//{
-//	char	*value;
-
-//	value = getenv(var_name);
-//	if (value)
-//		return (value);
-//	value = "";
-//	return (value);
-//}
 
 int	count_dollars(char *word)
 {
@@ -67,10 +78,11 @@ void	free_env(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (envp && envp[i] != NULL)
 	{
 		free(envp[i]);
 		i++;
 	}
-	free(envp);
+	if (envp)
+		free(envp);
 }

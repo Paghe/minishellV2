@@ -10,6 +10,7 @@ SRC = main.c \
 	utils/util.c \
 	builtin/echo.c \
 	builtin/cd.c \
+	builtin/cd_utils.c \
 	builtin/env.c \
 	builtin/pwd.c \
 	builtin/built.c \
@@ -24,13 +25,15 @@ SRC = main.c \
 	parse/utils_redir.c \
 	execution/pipe.c \
 	parse/environment_vars.c \
-	builtin/unset.c
+	builtin/unset.c \
+	builtin/export.c
 
 OBJ = $(SRC:.c=.o)
 
 LIBFT = ./libft/libft.a
+GNL = ./gnl/libgnl.a
 
-LINKFLAGS = -lreadline #-L$(shell brew --prefix readline)/lib -L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++
+LINKFLAGS = -lreadline #-L$(shell brew --prefix readline)/lib #-L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++
 
 all: 
 	$(MAKE) $(NAME) -j
@@ -40,10 +43,11 @@ all:
 
 $(NAME): $(OBJ) include/lexer.h
 	make -C libft
-	gcc  $(OBJ) $(LIBFT) $(FLAGS) -o $(NAME) $(LINKFLAGS)
+	gcc  $(OBJ) $(LIBFT) $(GNL) $(FLAGS) -o $(NAME) $(LINKFLAGS)
 clean:
 	rm -f $(OBJ)
 	make clean -C libft
+	make clean -C gnl
 
 fclean:
 	make clean

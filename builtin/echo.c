@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:27:24 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/22 14:21:35 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 17:52:33 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	echo_newline(t_cmds **cmds)
 {
 	int		no_newline;
 	int		i;
-
 
 	no_newline = 0;
 	i = 0;

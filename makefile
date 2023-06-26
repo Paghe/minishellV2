@@ -13,6 +13,7 @@ SRC = main.c \
 	builtin/cd_utils.c \
 	builtin/env.c \
 	builtin/pwd.c \
+	builtin/utils_builtin.c \
 	builtin/built.c \
 	parse/parse.c	\
 	parse/grammar.c	\

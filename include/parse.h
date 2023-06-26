@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/26 14:18:54 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/26 17:47:39 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ char	*go_home(char **env);
 int		get_env(t_cmds *cmds, char **env);
 int		build_pwd(t_cmds *cmds);
 int		pwd_goes_void(char **env, t_cmds *cmds);
+int		is_void_pwd(t_cmds *cmds);
 int		count_env_vars(char **envp);
 void	export(char **cmds, char ***env, char ***shell_env);
 void	execute_cmd(t_cmds *cmds, char **envp);

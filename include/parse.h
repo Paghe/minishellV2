@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/22 19:44:15 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/25 17:50:58 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	print_env(char **envp);
 int		set_env_var(char ***envp, char	*var_name, char *value);
 void	free_env(char **envp);
 int		built_in(t_cmds *cmds, char **env);
+int		if_is_builtin(char *cmd);
 int		echo(t_cmds *cmds);
 int		change_dir(char **env, t_cmds *cmds);
 void	change_old(char **env);

@@ -14,6 +14,8 @@
 #include "include/parse.h"
 #include "gnl/get_next_line.h"
 
+extern char **environ;
+
 void leaks(void)
 {
 	system("leaks minishell");
@@ -54,6 +56,7 @@ char **copy_env(char **envp)
 		new_envp[i] = ft_strdup(envp[i]);
 		i++;
 	}
+	new_envp[i] = NULL;
 	return (new_envp);
 }
 
@@ -143,7 +146,7 @@ int execute(char **envp, int *exit_code)
 			break;
 	}
 	free_env(shell_env);
-	/* 	free_env(envp); */
+	free_env(envp);
 	return (exec_code);
 }
 
@@ -160,9 +163,9 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if ((code = execute(env_vars, &exit_code)) == -1)
 	{
-		free_env(env_vars);
+		// free_env(env_vars);
 		return (-1);
 	}
-	free_env(env_vars);
+	// free_env(env_vars);
 	return (0);
 }

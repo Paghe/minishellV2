@@ -87,10 +87,11 @@ void	free_env(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i] != NULL)
+	while (envp && envp[i] != NULL)
 	{
 		free(envp[i]);
 		i++;
 	}
-	free(envp);
+	if (envp)
+		free(envp);
 }

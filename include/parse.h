@@ -14,8 +14,9 @@
 # define PARSE_H
 
 # include "lexer.h"
-//  #include <sys/types.h>
-//   #include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include "../gnl/get_next_line.h"
 
 # define READ_END 0
 # define WRITE_END 1
@@ -29,6 +30,7 @@ typedef struct s_data
 	int			fd_out;
 	int			pipe_in;
 	int			pipe_out;
+	int			is_append;
 }	t_data;
 
 typedef struct s_cmds
@@ -79,4 +81,5 @@ int		build_pwd(t_cmds *cmds);
 int		pwd_goes_void(char **env, t_cmds *cmds);
 int		count_env_vars(char **envp);
 void	export(char **cmds, char ***env, char ***shell_env);
+char	*ft_strdup2(const char *s1, int stop);
 #endif

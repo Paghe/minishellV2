@@ -10,7 +10,6 @@ SRC = main.c \
 	utils/util.c \
 	builtin/echo.c \
 	builtin/cd.c \
-	builtin/cd_utils.c \
 	builtin/env.c \
 	builtin/pwd.c \
 	builtin/built.c \
@@ -25,14 +24,13 @@ SRC = main.c \
 	parse/utils_redir.c \
 	execution/pipe.c \
 	parse/environment_vars.c \
-	builtin/unset.c \
-	builtin/export.c
+	builtin/unset.c
 
 OBJ = $(SRC:.c=.o)
 
 LIBFT = ./libft/libft.a
 
-LINKFLAGS = -lreadline #-L$(shell brew --prefix readline)/lib #-L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++
+LINKFLAGS = -lreadline #-L$(shell brew --prefix readline)/lib -L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++
 
 all: 
 	$(MAKE) $(NAME) -j

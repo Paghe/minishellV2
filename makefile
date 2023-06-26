@@ -24,7 +24,8 @@ SRC = main.c \
 	parse/utils_redir.c \
 	execution/pipe.c \
 	parse/environment_vars.c \
-	builtin/unset.c
+	builtin/unset.c \
+	builtin/export.c
 
 OBJ = $(SRC:.c=.o)
 

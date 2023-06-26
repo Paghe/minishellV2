@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:10:29 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/25 17:54:34 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/26 15:10:41 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	build_pwd(t_cmds *cmds)
 {
 	char	*pwd;
 	char	*check_format;	
-	
+
 	check_format = escape_quote(cmds[0].cmds[0]);
 	if (!ft_strncmp(check_format, "pwd", 4))
 	{

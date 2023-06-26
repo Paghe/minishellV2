@@ -13,6 +13,8 @@
 #include "../include/parse.h"
 #include "../include/control.h"
 
+extern char **environ;
+
 char	*ft_strdup2(const char *s1, int stop)
 {
 	char	*s2;
@@ -85,7 +87,7 @@ void	free_env(char **envp)
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (envp[i] != NULL)
 	{
 		free(envp[i]);
 		i++;

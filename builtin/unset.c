@@ -64,12 +64,12 @@ int	count_env_vars(char **envp)
 	return (i);
 }
 
-int	is_inside_env(char	**envp, char	*var_name)
+int	is_inside_env(char	**envp, char	*var_name, int count)
 {
 	int	i;
 
 	i = 0;
-	while (envp[i])
+	while (i < count)
 	{
 		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && *(envp[i] + ft_strlen(var_name)) == '=')
 			return (1);
@@ -103,7 +103,7 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 	i = 0;
 	j = 0;
 	count = count_env_vars(*envp);
-	if (is_inside_env(*envp, var_name))
+	if (is_inside_env(*envp, var_name, count))
 		new_envp = (char **)malloc(sizeof(char *) * (count + 1));
 	else
 		new_envp = (char **)malloc(sizeof(char *) * (count + 2));
@@ -116,7 +116,7 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 		i++;
 		j++;
 	}
-	if (is_inside_env(new_envp, var_name))
+	if (is_inside_env(new_envp, var_name, count))
 	{
 		j = get_env_index(new_envp, var_name);
 		free(new_envp[j]);

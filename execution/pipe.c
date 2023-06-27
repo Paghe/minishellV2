@@ -67,6 +67,17 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 	}
 	if (pid == 0)
 	{
+		if ((*red)->data.env == NULL)
+		  {
+			char *tmp;
+			char *tmp2;
+			tmp = ft_strjoin("minishell: ",(*red)->cmds[0]);
+			tmp2 = ft_strjoin(tmp, ": No such file or directory");
+			ft_putendl_fd(tmp2, 2);
+			free(tmp);
+			free(tmp2);
+			exit(0);
+		  }
     if (if_is_builtin((*red)->cmds[0]))
     {
     	built_in(*red, envp, shell_env);
@@ -91,11 +102,6 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
         close((*red)->data.fd_out);
       }
 		  (*red)->cmds = escape_quotes_cmds((*red)->cmds);
-		  if ((*red)->data.env == NULL)
-		  {
-		  	printf("minishell: %s: No such file or directory\n", (*red)->cmds[0]);
-			exit(0);
-		  }
 			if (ft_strncmp((*red)->cmds[0], "./", 2) == 0)
 			{
 				if (execve((*red)->cmds[0], (*red)->cmds, *envp) == -1)

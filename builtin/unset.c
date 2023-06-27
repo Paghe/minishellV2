@@ -71,7 +71,7 @@ int	is_inside_env(char	**envp, char	*var_name)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0)
+		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && *(envp[i] + ft_strlen(var_name)) == '=')
 			return (1);
 		i++;
 	}
@@ -86,7 +86,7 @@ int	get_env_index(char	**envp, char	*var_name)
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && ft_strncmp(envp[i] + ft_strlen(var_name), "=", 1) == 0)
-			return (i + 1);
+			return (i);
 		i++;
 	}
 	return (i);
@@ -116,9 +116,9 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 		i++;
 		j++;
 	}
-	if (is_inside_env(*envp, var_name))
+	if (is_inside_env(new_envp, var_name))
 	{
-		j = get_env_index(*envp, var_name);
+		j = get_env_index(new_envp, var_name);
 		free(new_envp[j]);
 		temp = ft_strjoin(var_name, "=");
 		new_envp[j] = ft_strjoin(temp, value);

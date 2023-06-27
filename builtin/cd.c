@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 20:20:51 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/23 16:29:25 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/27 15:34:39 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,41 +17,18 @@ int	cd_user(char **env, t_cmds *cmds)
 {
 	char	*dir;
 	int		i;
+	int		status;
 
 	i = 0;
 	dir = NULL;
-	if (!ft_strncmp(cmds[0].cmds[i], "cd", 2) && cmds[0].cmds[i + 1]\
-		&& !ft_strncmp(cmds[0].cmds[i + 1],"/Users", ft_strlen("/Users")))
+	status = 0;
+	if (!ft_strncmp(cmds[0].cmds[i], "cd", 2) && cmds[0].cmds[i + 1] \
+		&& !ft_strncmp(cmds[0].cmds[i + 1], "/Users", ft_strlen("/Users")))
 	{
 		dir = getcwd(NULL, 0);
-		while (!ft_strncmp(dir, "/Users", ft_strlen("/Users")))
-		{
-			change_old(env);
-			if (chdir("..") != 0)
-			{
-				perror(dir);
-				return (0);
-			}
-			free(dir);
-			dir = getcwd(NULL, 0);
-			if (!ft_strncmp(dir, "/Users", ft_strlen("/Users") + 1))
-			{
-				if (chdir(dir) != 0)
-				{
-					perror(cmds[0].cmds[i + 1]);
-					free(dir);
-					return (0);
-				}
-				else
-				{
-					change_current_pwd(env);
-					free(dir);
-					return (1);
-				}
-			}
-		}
+		status = go_to_user(cmds, dir, env);
 	}	
-	return (0);
+	return (status);
 }
 
 int	cd_home(char **env, t_cmds *cmds)

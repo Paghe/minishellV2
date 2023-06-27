@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/26 17:47:39 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/27 15:35:25 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int		built_in(t_cmds *cmds, char **env);
 int		if_is_builtin(char *cmd);
 int		echo(t_cmds *cmds);
 int		change_dir(char **env, t_cmds *cmds);
+int		go_to_user(t_cmds *cmds, char *dir, char **env);
 void	change_old(char **env);
 char	*get_path(t_cmds *cmds);
 void	change_current_pwd(char **env);

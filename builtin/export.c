@@ -32,5 +32,13 @@ void	export(char **cmds, char ***env, char ***shell_env)
 	else if (is_var == -1)
 		return ;
 	else
-		printf("minishell: export: `%s': not a valid identifier\n", ft_strtrim(cmds[1], "\'\""));
+	{
+		char *tmp;
+		char *tmp2;
+		tmp = ft_strjoin("minishell: export: `", ft_strtrim(cmds[1], "\'\""));
+		tmp2 = ft_strjoin(tmp, "': not a valid identifier");
+		ft_putendl_fd(tmp2, 2);
+		free(tmp);
+		free(tmp2);
+	}
 }

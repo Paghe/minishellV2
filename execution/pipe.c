@@ -91,6 +91,11 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
         close((*red)->data.fd_out);
       }
 		  (*red)->cmds = escape_quotes_cmds((*red)->cmds);
+		  if ((*red)->data.env == NULL)
+		  {
+		  	printf("minishell: %s: No such file or directory\n", (*red)->cmds[0]);
+			exit(0);
+		  }
 			if (ft_strncmp((*red)->cmds[0], "./", 2) == 0)
 			{
 				if (execve((*red)->cmds[0], (*red)->cmds, *envp) == -1)

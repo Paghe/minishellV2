@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:27:24 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/25 17:52:33 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/27 16:42:41 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,27 @@ int	is_echo_newline(char *current)
 	return (0);
 }
 
+int	only_echo(t_cmds **cmds)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_strncmp(cmds[0]->cmds[i], "echo", 5) && !cmds[0]->cmds[i + 1])
+	{
+		if (cmds[0]->data.pipe_out != -1)
+		{
+			ft_putstr_fd("\n", cmds[0]->data.pipe_out);
+			return (1);
+		}
+		else
+		{
+			ft_putstr_fd("\n", 1);
+			return (1);
+		}
+	}
+	return (0);
+}
+
 void	echo_newline(t_cmds **cmds)
 {
 	int		no_newline;
@@ -42,14 +63,8 @@ void	echo_newline(t_cmds **cmds)
 		i++;
 	}
 	i = 0;
-	if (!ft_strncmp(cmds[0]->cmds[i], "echo", 5) && !cmds[0]->cmds[i + 1])
-	{
-		if (cmds[0]->data.pipe_out != -1)
-			ft_putstr_fd("\n", cmds[0]->data.pipe_out);
-		else
-			ft_putstr_fd("\n", 1);
+	if (only_echo(cmds))
 		return ;
-	}
 	if (!ft_strncmp(cmds[0]->cmds[i], "echo", 5))
 	{
 		if (cmds[0]->cmds[i + 1])
@@ -91,27 +106,6 @@ void	echo_newline(t_cmds **cmds)
 		}
 	}
 }
-
-/* void	echo_line(t_token *current)
-{
-	if (!current->next)
-		return ;
-	if (!ft_strncmp(current->token, "echo", 5) && \
-		!ft_strncmp(current->next->token, "-n", 3))
-	{
-		if (current->next->next)
-		current = current->next->next;
-		while (current)
-		{
-			ft_putstr_fd(current->token, 1);
-			if (current->next)
-				ft_putstr_fd(" ", 1);
-			current = current->next;
-		}
-	}
-	else
-		echo_newline(current);
-} */
 
 int	echo(t_cmds *cmds)
 {

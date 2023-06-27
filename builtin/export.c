@@ -32,5 +32,5 @@ void	export(char **cmds, char ***env, char ***shell_env)
 	else if (is_var == -1)
 		return ;
 	else
-		printf("minishell: export: '%s': not a valid identifier\n", ft_strtrim(cmds[1], "\'\""));
+		printf("minishell: export: `%s': not a valid identifier\n", ft_strtrim(cmds[1], "\'\""));
 }

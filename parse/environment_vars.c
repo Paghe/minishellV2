@@ -62,7 +62,7 @@ int	count_dollars(char *word)
 	i = 0;
 	if (!word)
 		return (0);
-	while (*word)
+	while (word && *word)
 	{
 		if (*word == '$')
 			i++;

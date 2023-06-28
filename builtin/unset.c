@@ -15,17 +15,17 @@
 
 extern char	**environ;
 
-void	print_env(char **envp)
-{
-	int	i;
+// void	print_env(char **envp)
+// {
+// 	int	i;
 
-	i = 0;
-	while (envp[i])
-	{
-		printf("ENVP[%i]: %s\n", i, envp[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		printf("ENVP[%i]: %s\n", i, envp[i]);
+// 		i++;
+// 	}
+// }
 
 int	unset(char ***envp, char *var_name)
 {

@@ -82,14 +82,17 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 	int		i;
 	int		j;
 	int		fd;
+	int		flag;
 
 	current = tokens->front;
 	i = 0;
 	j = 0;
+	flag = 1;
 	while (current)
 	{
 		if (current->type == PIPE)
 		{
+			flag = 0;
 			init_pipes(cmds, i);
 			i++;
 			current = current->next;
@@ -97,6 +100,8 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 		}
 		if (is_input_redirect(current))
 		{
+			if (flag == 1)
+				cmds[i]->data.is_redir_first = 1;
 			if (current->next && is_the_word(current->next))
 			{
 				if (cmds[i]->data.input)
@@ -107,6 +112,8 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 		}
 		else if (is_output_redirect(current))
 		{
+			if (flag == 1)
+				cmds[i]->data.is_redir_first = 1;
 			if (current->type == DMORE)
 				cmds[i]->data.is_append = 1;
 			if (current->next && is_the_word(current->next))
@@ -121,19 +128,19 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 		}
 		else
 		{
+			flag = 0;
 			if (cmds[i]->data.env)
 				free(cmds[i]->data.env);
 			cmds[i]->cmds[j] = ft_strdup(current->token);
-			/* if (current->type == DQUOTE)
-				cmds[i]->data.type = DOQUOTE;
-			if (current->type == SQUOTE)
-				cmds[i]->data.type = SIQUOTE; */
 			cmds[i]->data.env = get_env_path(envp, cmds[i]->cmds[0]);
 			j++;
 			cmds[i]->cmds[j] = NULL;
 		}
 		if (current)
+		{
+			flag = 0;
 			current = current->next;
+		}
 	}
 }
 
@@ -149,6 +156,11 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	while (cmds[i])
 	{
 		j = 0;
+		if (cmds[i]->data.is_redir_first == 1)
+		{
+			i++;
+			continue ;
+		}
 		while (cmds[i]->cmds[j])
 		{
 			arg = cmds[i]->cmds[j];
@@ -187,12 +199,18 @@ void	free_parse(t_cmds **cmds)
 	while (cmds[i])
 	{
 		j = 0;
-		while (cmds[i]->cmds[j])
+		if (cmds[i]->data.is_redir_first)
+		{
+			i++;
+			continue;
+		}
+		while (cmds[i]->cmds && cmds[i]->cmds[j])
 		{
 			free(cmds[i]->cmds[j]);
 			j++;
 		}
-		free(cmds[i]->cmds);
+		if (cmds[i]->cmds)
+			free(cmds[i]->cmds);
 		if (cmds[i]->data.input)
 			free(cmds[i]->data.input);
 		if (cmds[i]->data.output)

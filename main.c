@@ -72,13 +72,13 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands
 	value = NULL;
 	while (cmds[i])
 	{
-		if (ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
+		if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
 		{
 			ft_putendl_fd("minishell: .: filename argument required\n.: usage: . filename [arguments]", 2);
 			i++;
 			continue;
 		}
-		if (is_env_var(cmds[i]->cmds[0], &var_name, &value) == 1)
+		if (!cmds[i]->data.is_redir_first && is_env_var(cmds[i]->cmds[0], &var_name, &value) == 1)
 		{
 			set_env_var(shell_env, var_name, value);
 			free(var_name);
@@ -88,6 +88,22 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands
 			pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
 		if (cmds[i]->data.env)
 			free(cmds[i]->data.env);
+		i++;
+	}
+}
+
+void	check_redir(t_cmds **cmds)
+{
+	int		i;
+
+	i = 0;
+	while (cmds[i])
+	{
+		if (cmds[i]->data.is_redir_first == 1)
+		{
+			free(cmds[i]->cmds);
+			cmds[i]->cmds[0] = NULL;
+		}
 		i++;
 	}
 }

@@ -44,6 +44,7 @@ t_cmds	**init_list_commands(t_tokens *tokens)
 		cmds[i]->data.fd_in = -1;
 		cmds[i]->data.fd_out = -1;
 		cmds[i]->data.is_append = 0;
+		cmds[i]->data.is_redir_first = 0;
 		if (current)
 			current = current->next;
 		i++;

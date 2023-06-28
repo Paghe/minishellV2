@@ -155,7 +155,5 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if ((code = execute(env_vars)) == -1)
 		EXIT_C = -1;
-	// free_env(env_vars);
-	printf("exit code: %i\n", EXIT_C);
 	return (EXIT_C);
 }

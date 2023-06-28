@@ -105,12 +105,26 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 			if (ft_strncmp((*red)->cmds[0], "./", 2) == 0)
 			{
 				if (execve((*red)->cmds[0], (*red)->cmds, *envp) == -1)
+				{
+					char *tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
+					char *tmp2 = ft_strjoin(tmp, ": command not found");
+					ft_putendl_fd(tmp2, 2);
+					free(tmp);
+					free(tmp2);
 					exit(-1);
+				}
 			}
 			else
 			{
 				if (execve((char const *)(*red)->data.env, (*red)->cmds, *envp) == -1)
+				{
+					char *tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
+					char *tmp2 = ft_strjoin(tmp, ": command not found");
+					ft_putendl_fd(tmp2, 2);
+					free(tmp);
+					free(tmp2);
 					exit(-1);
+				}
 			}
 		}
 	}

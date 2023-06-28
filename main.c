@@ -106,10 +106,10 @@ int execute(char **envp)
 	while (1)
 	{
 		clear_line();
-		// if (isatty(STDIN_FILENO))
+		if (isatty(STDIN_FILENO))
 			input = readline("minishell 🚀 ");
-		// else
-			// input = get_next_line(STDIN_FILENO);
+		else
+			input = ft_strtrim(get_next_line(STDIN_FILENO), "\n");
 		if (!input)
 		{
 			EXIT_C = -1;

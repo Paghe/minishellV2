@@ -38,6 +38,10 @@ int	if_is_builtin(char *cmd)
 		return (free(check_format), 1);
 	if (!ft_memcmp(check_format, "export", 7))
 		return (free(check_format), 1);
+	if (!ft_memcmp(check_format, "unset", 6))
+		return (free(check_format), 1);
+	if (!ft_memcmp(check_format, "exit", 5))
+		return (free(check_format), 1);
 	return (free(check_format), 0);
 }
 
@@ -46,9 +50,20 @@ int	built_in(t_cmds *cmds, char ***env, char ***shell_envp)
 	int	flag;
 
 	flag = 0;
-	if (ft_memcmp(cmds->cmds[0], "export", 6) == 0)
+	if (ft_memcmp(cmds->cmds[0], "exit", 5) == 0)
+	{
+			EXIT_C = -1;
+			flag = 1;
+	}
+	if (ft_memcmp(cmds->cmds[0], "export", 7) == 0)
 	{
 		export(cmds->cmds, env, shell_envp);
+		flag = 1;
+	}
+	if (ft_memcmp(cmds->cmds[0], "unset", 6) == 0)
+	{
+		unset(env, cmds->cmds[1]);
+		unset(shell_envp, cmds->cmds[1]);
 		flag = 1;
 	}
 	if (echo(cmds))

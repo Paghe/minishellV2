@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 21:49:08 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/16 19:18:44 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/28 11:51:31 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int	ms_whitespace(char input)
 {
-	if (input >= 0 && input <= 32)
+	if (input && (input >= 0 && input <= 32))
 		return (1);
 	return (0);
 }

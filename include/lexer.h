@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 20:53:59 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/25 17:50:47 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/06/28 13:27:42 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,9 @@ void		def_type_tok(t_token *token);
 void		print_token_type(t_token_type type);
 void		print_token(t_tokens *tokens);
 char		format_is_symbol(char symbol);
+int			skip_whitespaces(char *str);
+int			give_a_space(char *buffer, int j);
+int			space_double_symbol(char *line, char *buffer, int count, int *i);
+int			space_single_symbol(char *line, char *buffer, int count, int *i);
 
 #endif

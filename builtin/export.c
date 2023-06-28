@@ -33,6 +33,7 @@ void	export(char **cmds, char ***env, char ***shell_env)
 		return ;
 	else
 	{
+		EXIT_C = 1;
 		char *tmp;
 		char *tmp2;
 		tmp = ft_strjoin("minishell: export: `", ft_strtrim(cmds[1], "\'\""));

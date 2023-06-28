@@ -41,7 +41,7 @@ char	*get_env_path(char **envp, char *command)
 			path = ft_strdup(envp[i]);
 	}
 	paths = ft_split(path + 5, ':');
-	if (ft_strrchr(command, '/') == ft_strchr(command, '/') && *command == '/')
+	if (ft_strrchr(command, '/') == ft_strchr(command, '/') && *command == '/' && !if_is_builtin(command))
 	{
 		free(path);
 		free_paths(paths);
@@ -67,6 +67,8 @@ char	*get_env_path(char **envp, char *command)
 		free(cmd_path);
 	}
 	free_paths(paths);
+	if (if_is_builtin(cmd))
+		return (ft_strdup(cmd));
 	return (NULL); // this way is way faster to allocate memory 
 }
 

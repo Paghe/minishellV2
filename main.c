@@ -115,12 +115,12 @@ int execute(char **envp)
 	char *input;
 	char **shell_env;
 
-	// signal(SIGINT, cntr_handler);
-	// signal(SIGQUIT, cntr_handler);
 	cmds = NULL;
 	shell_env = copy_env(envp);
 	while (1)
 	{
+		signal(SIGINT, cntr_handler);
+		signal(SIGQUIT, cntr_handler);
 		clear_line();
 		if (isatty(STDIN_FILENO))
 			input = readline("minishell 🚀 ");
@@ -148,6 +148,7 @@ int execute(char **envp)
 		parse_tokens(lexer.tokens, cmds, envp);
 		replace_env_vars(cmds, envp);
 		replace_env_vars(cmds, shell_env);
+		block_signals();
 		execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens));
 		destroy_tokens(lexer.tokens);
 		free_parse(cmds);
@@ -171,5 +172,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if ((code = execute(env_vars)) == -1)
 		EXIT_C = -1;
+	EXIT_C = 0;
+	// exit(EXIT_C);
 	return (EXIT_C);
 }

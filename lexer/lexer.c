@@ -12,19 +12,19 @@
 
 #include "../include/lexer.h"
 
-void	print_token(t_tokens *tokens)
-{
-	t_token	*current;
+// void	print_token(t_tokens *tokens)
+// {
+// 	t_token	*current;
 
-	current = tokens->front;
-	while (current)
-	{
-		printf("[%s]\t [", current->token);
-		print_token_type(current->type);
-		printf("]\n");
-		current = current->next;
-	}
-}
+// 	current = tokens->front;
+// 	while (current)
+// 	{
+// 		printf("[%s]\t [", current->token);
+// 		print_token_type(current->type);
+// 		printf("]\n");
+// 		current = current->next;
+// 	}
+// }
 
 int	min(int a, int b)
 {

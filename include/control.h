@@ -31,9 +31,6 @@ void		cntr_handler(int signum);
 void		clear_line(void);
 char		*get_env_path(char **envp, char *command);
 t_redirection	fill_redirection_struct(char *command, char *filename, char **args, char **envp);
-void	output_redirection_append(t_redirection *red);
-void	set_signals_noninteractive(void);
-void	set_signals_interactive(void);
-void	ignore_sigquit(void);
+void	block_signals(void);
 void	slash_handler(int signum);
 #endif

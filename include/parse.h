@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/01 15:36:38 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/01 15:47:57 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_data
 	int			pipe_in;
 	int			pipe_out;
 	int			is_append;
+	int			is_redir_first;
 }	t_data;
 
 typedef struct s_cmds

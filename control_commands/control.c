@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 20:04:10 by crepou            #+#    #+#             */
-/*   Updated: 2023/06/19 18:05:06 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/03 17:19:48 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ void	cntr_handler(int signum)
 	slash_handler(signum);
 	if (signum == SIGINT)
 		write(1, "\n", 1);
-	rl_on_new_line();
+	//rl_on_new_line();
 	// // rl_replace_line("", 0);
-	rl_redisplay();
+	//rl_redisplay();
 }
 
 void	slash_handler(int signum)
@@ -45,7 +45,7 @@ void	slash_handler(int signum)
 void	signal_on_block(int signum)
 {
 	(void)signum;
-	rl_on_new_line();
+	//rl_on_new_line();
 }
 
 void	block_signals(void)

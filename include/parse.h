@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 17:02:02 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/03 19:57:32 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 # define PARSE_H
 
 # include "lexer.h"
-#include <sys/types.h>
-#include <sys/wait.h>
-#include "../gnl/get_next_line.h"
+# include <sys/types.h>
+# include <sys/wait.h>
+# include "../gnl/get_next_line.h"
 
 # define READ_END 0
 # define WRITE_END 1
@@ -61,7 +61,8 @@ void	redirect_io(int input, int output);
 int		begin_with_pipes(t_token *token);
 int		init_pipes(t_cmds **cmds, int index);
 void	close_all(t_cmds **cmds);
-void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env);
+void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all, \
+						int n_commands, char ***shell_env);
 int		is_env_var(char *word, char	**var_name, char **value);
 char	*get_env_var(char *var_name, char **envp);
 void	replace_env_vars(t_cmds **cmds, char **envp);

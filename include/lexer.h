@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 20:53:59 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 17:01:43 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/03 19:47:17 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,16 @@ int			give_a_space(char *buffer, int j);
 int			space_double_symbol(char *line, char *buffer, int count, int *i);
 int			space_single_symbol(char *line, char *buffer, int count, int *i);
 int			if_is_builtin(char *cmd);
+void		tokenize_input_init(t_lexer *lexer, char *buffer, \
+						char *good_line, char *buf_ptr);
+char		*replace_spaces(char *str);
+char		*format_line(char *line);
+int			min(int a, int b);
+void		token_parse(t_lexer *lexer, char *buffer, \
+						char *good_line, char *buf_ptr);
+int			have_dquote(char current, int squote, int dquote);
+int			have_squote(char current, int squote, int dquote);
+void		destroy_node(t_token *token);
+void		destroy_tokens(t_tokens *tokens);
 
 #endif

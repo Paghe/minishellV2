@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 12:38:10 by apaghera          #+#    #+#             */
-/*   Updated: 2022/11/03 13:17:45 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/03 17:28:48 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ char	*ft_strtrim(char const *s1, char const *set)
 	size_t	end;
 
 	start = 0;
+	if (!s1)
+		return (NULL);
 	while (s1[start] && ft_char_in_set(s1[start], set))
 		start++;
 	end = ft_strlen(s1);

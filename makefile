@@ -6,8 +6,10 @@ NAME = minishell
 SRC = main.c \
 	lexer/lexer.c	\
 	lexer/lex_utils.c	\
+	lexer/lex_utils_two.c \
 	utils/init_link_lst.c \
 	utils/util.c \
+	utils/token_utils.c \
 	builtin/echo.c \
 	builtin/cd.c \
 	builtin/cd_utils.c \
@@ -45,7 +47,7 @@ all:
 
 $(NAME): $(OBJ) include/lexer.h
 	make -C libft
-	gcc  $(OBJ) $(LIBFT) $(GNL) $(FLAGS) -o $(NAME) $(LINKFLAGS)
+	gcc  $(OBJ) $(LIBFT) $(GNL) -o $(NAME) $(LINKFLAGS) $(FLAGS) 
 clean:
 	rm -f $(OBJ)
 	make clean -C libft

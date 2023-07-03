@@ -6,14 +6,14 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 14:15:51 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:49 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/03 17:09:59 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/parse.h"
 #include "../include/control.h"
 
-void	execute_cmd(t_cmds *cmds, char **envp)
+/* void	execute_cmd(t_cmds *cmds, char **envp)
 {
 	pid_t	pid;
 
@@ -71,3 +71,4 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int *exit_code
 		i++;
 	}
 }
+ */

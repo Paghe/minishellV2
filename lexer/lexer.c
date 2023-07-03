@@ -6,25 +6,25 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:48:23 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/28 13:46:01 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/03 19:54:46 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/lexer.h"
 
-// void	print_token(t_tokens *tokens)
-// {
-// 	t_token	*current;
+void	print_token(t_tokens *tokens)
+{
+	t_token	*current;
 
-// 	current = tokens->front;
-// 	while (current)
-// 	{
-// 		printf("[%s]\t [", current->token);
-// 		print_token_type(current->type);
-// 		printf("]\n");
-// 		current = current->next;
-// 	}
-// }
+	current = tokens->front;
+	while (current)
+	{
+		printf("[%s]\t [", current->token);
+		print_token_type(current->type);
+		printf("]\n");
+		current = current->next;
+	}
+}
 
 int	min(int a, int b)
 {
@@ -33,107 +33,61 @@ int	min(int a, int b)
 	return (a);
 }
 
-char	*replace_spaces(char *str)
+char	next_value_char(int i, char *good_line, char next)
 {
-	size_t	i;
-	size_t	j;
-	char	buffer[LINEBUFFER_MAX];
-	int		squote;
-	int		dquote;
-
-	i = skip_whitespaces(str);
-	j = 0;
-	squote = 0;
-	dquote = 0;
-	while (i < ft_strlen(str))
-	{
-		if (str[i] == '\"' && !squote)
-			dquote ^= 1;
-		if (str[i] == '\'' && !dquote)
-			squote ^= 1;
-		if ((str[i] == ' ' || str[i] == '\t') && (!squote && !dquote))
-			j = give_a_space(buffer, j);
-		else
-			buffer[j++] = str[i];
-		i++;
-	}
-	buffer[j] = '\0';
-	free(str);
-	return (ft_strdup(buffer));
+	if (i <= min(ft_strlen(good_line), LINEBUFFER_MAX))
+		next = good_line[i + 1];
+	if (next)
+		return (next);
+	else
+		return (0);
 }
 
-char	*format_line(char *line)
+void	token_parse(t_lexer *lexer, char *buffer, \
+						char *good_line, char *buf_ptr)
 {
-	char	buffer[LINEBUFFER_MAX];
 	int		i;
-	int		count;
+	int		dquote;
+	int		squote;
+	char	current;
+	char	next;
 
-	i = 0;
-	count = 0;
-	while (line[i])
+	i = -1;
+	dquote = 0;
+	squote = 0;
+	while (++i < min(ft_strlen(good_line), LINEBUFFER_MAX))
 	{
-		if ((line[i] == '>' && line[i + 1] == '>') || \
-			(line[i] == '<' && line[i + 1] == '<'))
-				count = space_double_symbol(line, buffer, count, &i);
-		else if (line[i] == format_is_symbol(line[i]))
-			count = space_single_symbol(line, buffer, count, &i);
-		else
+		current = good_line[i];
+		dquote = have_dquote(current, squote, dquote);
+		squote = have_squote(current, squote, dquote);
+		next = next_value_char(i, good_line, next);
+		if (((current == ' ' && good_line[i + 1] != ' ' && next) || \
+				current == '\0') && !squote && !dquote)
 		{
-			buffer[count] = line[i];
-			count++;
+			buffer[i] = '\0';
+			add_token(lexer->tokens, buf_ptr, buf_ptr);
+			buf_ptr += ft_strlen(buf_ptr) + 1;
 		}
-		i++;
 	}
-	buffer[count] = '\0';
-	return (ft_strdup(buffer));
+	add_token(lexer->tokens, buf_ptr, buf_ptr);
 }
 
 void	parsing(t_lexer *lexer, char *input)
 {
 	int		i;
 	char	buffer[LINEBUFFER_MAX];
-	size_t	len;
-	char	current;
-	char	next;
 	char	*line;
 	char	*buf_ptr;
-	int		squote;
-	int		dquote;
 	char	*good_line;
 
 	i = 0;
 	line = replace_spaces(input);
 	good_line = format_line(line);
+	free(line);
 	good_line = replace_spaces(good_line);
 	good_line = ft_strtrim(good_line, " ");
-	len = min(ft_strlen(good_line), LINEBUFFER_MAX);
-	ft_memcpy(buffer, good_line, len);
-	buffer[len] = '\0';
 	lexer->tokens = create_tokens();
-	squote = 0;
-	dquote = 0;
 	buf_ptr = buffer;
-	while (i < (int)len)
-	{
-		current = good_line[i];
-		if (current == '\"' && !squote)
-			dquote ^= 1;
-		if (current == '\'' && !dquote)
-			squote ^= 1;
-		if (i <= (int)len)
-			next = good_line[i + 1];
-		else
-			i = 0;
-		if (((current == ' ' && good_line[i + 1] != ' ' && next) || current == '\0') && !squote && !dquote)
-		{
-			buffer[i] = '\0';
-			add_token(lexer->tokens, buf_ptr, buf_ptr);
-			buf_ptr += ft_strlen(buf_ptr) + 1;
-		}
-		i++;
-	}
-	add_token(lexer->tokens, buf_ptr, buf_ptr);
-/* 	print_token(lexer->tokens); */
-	free(good_line);
-	free(line);
+	tokenize_input_init(lexer, buffer, \
+						good_line, buf_ptr);
 }

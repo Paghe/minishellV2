@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 16:59:30 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/03 17:12:41 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int execute(char **envp)
 		destroy_tokens(lexer.tokens);
 		free_parse(cmds);
 		if (EXIT_C == -1)
-			break;
+			break ;
 	}
 	free_env(shell_env);
 	free_env(envp);

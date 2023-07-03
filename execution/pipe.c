@@ -6,11 +6,12 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
+/*   Updated: 2023/07/04 00:30:16 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
 #include "../include/control.h"
+#include "../include/parse.h"
 
 extern char	**environ;
 

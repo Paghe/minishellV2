@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:19:33 by crepou            #+#    #+#             */
-/*   Updated: 2023/06/19 18:15:55 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/04 00:30:32 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ char	*get_env_path(char **envp, char *command)
 	while (paths[++i])
 	{
 		cmd_path = malloc(ft_strlen(paths[i]) + ft_strlen(cmd) + 2);
-		strcpy(cmd_path, paths[i]); // Implement strcpy
-		strcat(cmd_path, "/");	// Implement strcat
-		strcat(cmd_path, cmd);
+		ft_strcpy(cmd_path, paths[i]); // Implement strcpy
+		ft_strcat(cmd_path, "/");	// Implement strcat
+		ft_strcat(cmd_path, cmd);
 		if (access(cmd_path, X_OK) == 0)
 		{
 			free_paths(paths); // free stuff looks above

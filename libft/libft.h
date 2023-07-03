@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 12:58:07 by apaghera          #+#    #+#             */
-/*   Updated: 2022/11/03 13:53:57 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/04 00:26:27 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,7 @@ void				*ft_calloc(size_t count, size_t size);
 char				*ft_substr(char const *s, unsigned int start, size_t len);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
 void				ft_lstadd_front(t_list **lst, t_list *new);
+char				*ft_strcat(char *s, char *s2);
+char				*ft_strcpy(char *s, char *s2);
 
 #endif

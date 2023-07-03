@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 19:57:32 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/04 00:28:58 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,5 @@ int		is_void_pwd(t_cmds *cmds);
 int		count_env_vars(char **envp);
 void	export(char **cmds, char ***env, char ***shell_env);
 char	*ft_strdup2(const char *s1, int stop);
+
 #endif

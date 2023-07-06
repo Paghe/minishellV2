@@ -6,11 +6,12 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/07 01:36:57 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/07 01:41:19 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/control.h"
+#include "../include/parse.h"
 
 char	*escape_quote(char	*cmds)
 {

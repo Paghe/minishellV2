@@ -6,12 +6,13 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/07 01:37:37 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/07 01:42:10 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/parse.h"
 #include "gnl/get_next_line.h"
+#include "include/control.h"
 
 extern char **environ;
 int EXIT_C;

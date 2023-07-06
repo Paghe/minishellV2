@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:40:36 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/16 19:15:57 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:24:34 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 int	is_symbol(t_token *token)
 {
-	t_token	*current;
-
-	current = token;
-	if (current->type == DQUOTE || current->type == SQUOTE || \
-			current->type == DMORE || current->type == DLESS || \
-				current->type == LESS || current->type == MORE)
+	if (token->type == DMORE || token->type == DLESS || \
+				token->type == LESS || token->type == MORE)
 		return (1);
 	return (0);
 }

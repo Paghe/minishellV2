@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/22 14:16:32 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:31:59 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,13 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 		}
 		if (is_input_redirect(current))
 		{
+			if (current->type == DLESS)
+			{
+				if (cmds[i]->data.input)
+					free(cmds[i]->data.input);
+				here_doc(current, cmds[i]);
+				current = current->next;
+			}
 			if (flag == 1)
 				cmds[i]->data.is_redir_first = 1;
 			if (current->next && is_the_word(current->next))

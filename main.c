@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 17:12:41 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:43:22 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,5 @@ int	main(int argc, char **argv, char **envp)
 	if ((code = execute(env_vars)) == -1)
 		EXIT_C = -1;
 	EXIT_C = 0;
-	// exit(EXIT_C);
 	return (EXIT_C);
 }

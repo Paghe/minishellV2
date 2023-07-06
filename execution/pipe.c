@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/04 00:30:16 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/06 15:24:03 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,6 @@ void	close_all(t_cmds **cmds)
 			close(cmds[i]->data.pipe_in);
 		if (cmds[i]->data.pipe_out != -1)
 			close(cmds[i]->data.pipe_out);
-		// if (cmds[i]->data.fd_in != -1)
-		// 	printf("fd in: %i\n", cmds[i]->data.fd_in);
-		// if (cmds[i]->data.fd_out != -1)
-		// 	printf("fd out: %i\n", cmds[i]->data.fd_out);
 		i++;
 	}
 }

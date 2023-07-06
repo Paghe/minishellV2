@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/04 00:28:58 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/06 17:09:53 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	*escape_quote(char	*cmds);
 void	no_quote(t_cmds *cmds);
 int		is_symbol(t_token *token);
 int		check_first_token(t_token	*token);
+int		not_correct_pos(t_token *current);
 int		get_grammar(t_tokens *tokens);
 int		is_word(t_token *token);
 void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp);
@@ -90,5 +91,6 @@ int		is_void_pwd(t_cmds *cmds);
 int		count_env_vars(char **envp);
 void	export(char **cmds, char ***env, char ***shell_env);
 char	*ft_strdup2(const char *s1, int stop);
+void	here_doc(t_token *token, t_cmds *cmds);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 21:49:08 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/28 11:51:31 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:36:21 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,15 @@ int	begin_with_pipes(t_token *token)
 	}
 	ft_putstr_fd("'", 2);
 	ft_putstr_fd("\n", 2);
+	return (1);
+}
+
+int	not_correct_pos(t_token *current)
+{
+	if (current->next && (is_symbol(current->next) && !current->next->next))
+	{
+		ft_putstr_fd("syntax error near unexpected token `newline'\n", 2);
+		return (0);
+	}
 	return (1);
 }

@@ -6,11 +6,10 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/07 00:49:18 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/07 01:37:37 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/control.h"
 #include "include/parse.h"
 #include "gnl/get_next_line.h"
 
@@ -147,6 +146,5 @@ int	main(int argc, char **argv, char **envp)
 	if ((code = execute(env_vars)) == -1)
 		EXIT_C = -1;
 	EXIT_C = 0;
-	// exit(EXIT_C);
 	return (EXIT_C);
 }

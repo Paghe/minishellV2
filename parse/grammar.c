@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 18:34:03 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/19 17:02:52 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:37:16 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,27 +54,8 @@ int	get_symbol(t_token *token)
 	return (0);
 }
 
-int	get_grammar(t_tokens *tokens)
+int	check_last_token(t_tokens *tokens, t_token *current)
 {
-	t_token	*current;
-
-	current = tokens->front;
-	if (!check_first_token(current))
-		return (0);
-	while (current && current->next)
-	{
-		if (!get_symbol(current))
-		{
-			if (begin_with_pipes(current))
-				return (0);
-		}
-		if (!is_pipe(current))
-		{
-			ft_putstr_fd("syntax error near unexpected token `|'\n", 2);
-			return (0);
-		}
-		current = current->next;
-	}
 	if (is_word(current))
 		return (1);
 	else
@@ -91,4 +72,32 @@ int	get_grammar(t_tokens *tokens)
 		}
 		return (0);
 	}
+}
+
+int	get_grammar(t_tokens *tokens)
+{
+	t_token	*current;
+
+	current = tokens->front;
+	if (!not_correct_pos(current))
+		return (0);
+	if (!check_first_token(current))
+		return (0);
+	while (current && current->next)
+	{
+		if (!get_symbol(current))
+		{
+			if (begin_with_pipes(current))
+				return (0);
+		}
+		if (!is_pipe(current))
+		{
+			ft_putstr_fd("syntax error near unexpected token `|'\n", 2);
+			return (0);
+		}
+		current = current->next;
+	}
+	if (!check_last_token(tokens, current))
+		return (0);
+	return (1);
 }

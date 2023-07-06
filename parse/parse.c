@@ -6,11 +6,10 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/07 00:51:26 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/07 01:36:57 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
 #include "../include/control.h"
 
 char	*escape_quote(char	*cmds)
@@ -100,6 +99,13 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 		}
 		if (is_input_redirect(current))
 		{
+			if (current->type == DLESS)
+			{
+				if (cmds[i]->data.input)
+					free(cmds[i]->data.input);
+				here_doc(current, cmds[i]);
+				current = current->next;
+			}
 			if (flag == 1)
 				cmds[i]->data.is_redir_first = 1;
 			if (current->next && is_the_word(current->next))

@@ -6,11 +6,10 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/07 00:51:03 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/07 01:37:58 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/control.h"
 #include "../include/parse.h"
 
 extern char	**environ;
@@ -38,10 +37,6 @@ void	close_all(t_cmds **cmds)
 			close(cmds[i]->data.pipe_in);
 		if (cmds[i]->data.pipe_out != -1)
 			close(cmds[i]->data.pipe_out);
-		// if (cmds[i]->data.fd_in != -1)
-		// 	printf("fd in: %i\n", cmds[i]->data.fd_in);
-		// if (cmds[i]->data.fd_out != -1)
-		// 	printf("fd out: %i\n", cmds[i]->data.fd_out);
 		i++;
 	}
 }

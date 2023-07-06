@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/04 00:30:16 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/07 00:51:03 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 	int	pid;
 
 	(void)all;
-	if (!(*red)->data.is_redir_first && if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
+	if (if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
 	{
 		built_in(*red, envp, shell_env);
 		if ((*red)->data.pipe_in != -1)
@@ -68,18 +68,18 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 	}
 	if (pid == 0)
 	{
-		if (!(*red)->data.is_redir_first && (*red)->data.env == NULL)
-		  {
-			char *tmp;
-			char *tmp2;
-			tmp = ft_strjoin("minishell: ",(*red)->cmds[0]);
-			tmp2 = ft_strjoin(tmp, ": No such file or directory");
-			ft_putendl_fd(tmp2, 2);
-			free(tmp);
-			free(tmp2);
-			exit(0);
-		  }
-    if (!(*red)->data.is_redir_first && if_is_builtin((*red)->cmds[0]))
+		//if (!(*red)->data.is_redir_first && (*red)->data.env == NULL)
+		//  {
+		//	char *tmp;
+		//	char *tmp2;
+		//	tmp = ft_strjoin("minishell: ",(*red)->cmds[0]);
+		//	tmp2 = ft_strjoin(tmp, ": No such file or directory");
+		//	ft_putendl_fd(tmp2, 2);
+		//	free(tmp);
+		//	free(tmp2);
+		//	exit(0);
+		//  }
+    if (if_is_builtin((*red)->cmds[0]))
     {
     	built_in(*red, envp, shell_env);
 		exit(0);
@@ -102,12 +102,12 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
         close((*red)->data.fd_in);
         close((*red)->data.fd_out);
       }
-		  if ((*red)->data.is_redir_first)
-		  {
-			char	*tmp[3] = {"/usr/bin/echo", "-n", NULL};
-			if (execve("/usr/bin/echo", tmp, *envp) == -1)
-				exit(0);
-		  }
+		//  if ((*red)->data.is_redir_first)
+		//  {
+		//	char	*tmp[3] = {"/usr/bin/echo", "-n", NULL};
+		//	if (execve("/usr/bin/echo", tmp, *envp) == -1)
+		//		exit(0);
+		//  }
 		  (*red)->cmds = escape_quotes_cmds((*red)->cmds);
 		 if (ft_strncmp((*red)->cmds[0], "./", 2) == 0)
 			{

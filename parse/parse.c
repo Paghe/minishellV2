@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/22 14:16:32 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/07 00:51:26 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,11 +156,11 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	while (cmds[i])
 	{
 		j = 0;
-		if (cmds[i]->data.is_redir_first == 1)
-		{
-			i++;
-			continue ;
-		}
+		//if (cmds[i]->data.is_redir_first == 1)
+		//{
+		//	i++;
+		//	continue ;
+		//}
 		while (cmds[i]->cmds[j])
 		{
 			arg = cmds[i]->cmds[j];
@@ -199,11 +199,11 @@ void	free_parse(t_cmds **cmds)
 	while (cmds[i])
 	{
 		j = 0;
-		if (cmds[i]->data.is_redir_first)
-		{
-			i++;
-			continue;
-		}
+		//if (cmds[i]->data.is_redir_first)
+		//{
+		//	i++;
+		//	continue;
+		//}
 		while (cmds[i]->cmds && cmds[i]->cmds[j])
 		{
 			free(cmds[i]->cmds[j]);

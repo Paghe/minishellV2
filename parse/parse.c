@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/06 18:31:59 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/07 01:41:19 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/parse.h"
 #include "../include/control.h"
+#include "../include/parse.h"
 
 char	*escape_quote(char	*cmds)
 {
@@ -163,11 +163,11 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	while (cmds[i])
 	{
 		j = 0;
-		if (cmds[i]->data.is_redir_first == 1)
-		{
-			i++;
-			continue ;
-		}
+		//if (cmds[i]->data.is_redir_first == 1)
+		//{
+		//	i++;
+		//	continue ;
+		//}
 		while (cmds[i]->cmds[j])
 		{
 			arg = cmds[i]->cmds[j];
@@ -206,11 +206,11 @@ void	free_parse(t_cmds **cmds)
 	while (cmds[i])
 	{
 		j = 0;
-		if (cmds[i]->data.is_redir_first)
-		{
-			i++;
-			continue;
-		}
+		//if (cmds[i]->data.is_redir_first)
+		//{
+		//	i++;
+		//	continue;
+		//}
 		while (cmds[i]->cmds && cmds[i]->cmds[j])
 		{
 			free(cmds[i]->cmds[j]);

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/04 15:43:22 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/07 01:42:10 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/control.h"
 #include "include/parse.h"
 #include "gnl/get_next_line.h"
+#include "include/control.h"
 
 extern char **environ;
 int EXIT_C;
@@ -46,19 +46,19 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands
 	value = NULL;
 	while (cmds[i])
 	{
-		if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
-		{
-			ft_putendl_fd("minishell: .: filename argument required\n.: usage: . filename [arguments]", 2);
-			i++;
-			continue;
-		}
-		if (!cmds[i]->data.is_redir_first && is_env_var(cmds[i]->cmds[0], &var_name, &value) == 1)
-		{
-			set_env_var(shell_env, var_name, value);
-			free(var_name);
-			free(value);
-		}
-		else
+		//if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
+		//{
+		//	ft_putendl_fd("minishell: .: filename argument required\n.: usage: . filename [arguments]", 2);
+		//	i++;
+		//	continue;
+		//}
+		//if (!cmds[i]->data.is_redir_first && is_env_var(cmds[i]->cmds[0], &var_name, &value) == 1)
+		//{
+		//	set_env_var(shell_env, var_name, value);
+		//	free(var_name);
+		//	free(value);
+		//}
+		//else
 			pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
 		if (cmds[i]->data.env)
 			free(cmds[i]->data.env);

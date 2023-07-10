@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 17:04:46 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 19:43:40 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:45:52 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	change_old(char **env)
 
 	i = 0;
 	old = getcwd(NULL, 0);
+	if (!old)
+		perror(old);
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], "OLDPWD=", ft_strlen("OLDPWD=")))
@@ -41,6 +43,8 @@ char	*get_path(t_cmds *cmds)
 
 	dir = NULL;
 	path = getcwd(NULL, 0);
+	if (!path)
+		perror(path);
 	tmp = ft_strjoin(path, "/");
 	if (cmds[0].cmds[1][0] == '/')
 		dir = ft_strjoin(path, dir);
@@ -58,6 +62,8 @@ void	change_current_pwd(char **env)
 
 	i = 0;
 	current = getcwd(NULL, 0);
+	if (!current)
+		perror(current);
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], "PWD=", ft_strlen("PWD=")))
@@ -100,6 +106,8 @@ int	pwd_goes_void(char **env, t_cmds *cmds)
 	dir = NULL;
 	is_void = 0;
 	dir = getcwd(NULL, 0);
+	if (!dir)
+		perror(dir);
 	is_void = is_void_pwd(cmds);
 	if (!dir || !is_void)
 		return (0);

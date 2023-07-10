@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/31 20:20:51 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/27 15:34:39 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:53:55 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	cd_user(char **env, t_cmds *cmds)
 		&& !ft_strncmp(cmds[0].cmds[i + 1], "/Users", ft_strlen("/Users")))
 	{
 		dir = getcwd(NULL, 0);
+		if (!dir)
+			perror(dir);
 		status = go_to_user(cmds, dir, env);
 	}	
 	return (status);

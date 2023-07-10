@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/10 18:25:32 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/10 19:17:22 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,20 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 				if (cmds[i]->data.input)
 					free(cmds[i]->data.input);
 				here_doc(current, cmds[i]);
-				current = current->next;
+				if (current->next && is_the_word(current->next))
+					current = current->next;
 			}
-			if (flag == 1)
-				cmds[i]->data.is_redir_first = 1;
-			if (current->next && is_the_word(current->next))
+			if(current->next && is_the_word(current->next))
 			{
 				if (cmds[i]->data.input)
 					free(cmds[i]->data.input);
 				cmds[i]->data.input = ft_strdup(current->next->token);
 				current = current->next;
 			}
+			if (flag == 1)
+				cmds[i]->data.is_redir_first = 1;
 		}
-		else if (is_output_redirect(current))
+		if (is_output_redirect(current))
 		{
 			if (flag == 1)
 				cmds[i]->data.is_redir_first = 1;
@@ -128,7 +129,10 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 				if (cmds[i]->data.output)
 					free(cmds[i]->data.output);
 				cmds[i]->data.output = ft_strdup(current->next->token);
-				fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+				if (cmds[i]->data.is_append)
+					fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+				else
+					fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 				close(fd);
 				current = current->next;
 			}

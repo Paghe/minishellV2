@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:19:33 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/04 00:30:32 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/11 19:02:58 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ char	*get_env_path(char **envp, char *command)
 	char	*cmd;
 
 	i = -1;
+	path = NULL;
 	while (envp[++i])
 	{
 		if (envp[i] == ft_strnstr(envp[i], "PATH", 4))
 			path = ft_strdup(envp[i]);
 	}
+	if (!path)
+		return (NULL);
 	paths = ft_split(path + 5, ':');
 	if (ft_strrchr(command, '/') == ft_strchr(command, '/') && *command == '/' && !if_is_builtin(command))
 	{

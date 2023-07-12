@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   built.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:15:04 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 16:59:39 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/12 16:29:32 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	if_is_builtin(char *cmd)
 	}
 	i = 0;
 	check_format = escape_quote(cmd);
-	if (!ft_strncmp(check_format, "echo", 5))
+	if (!ft_strncmp(check_format, "echo", 5) || !ft_strncmp(check_format, "/bin/echo", 10))
 		return (free(check_format), 1);
 	if (!ft_memcmp(check_format, "cd", 3))
 		return (free(check_format), 1);

@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/07 01:42:10 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/11 18:59:04 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands
 	i = 0;
 	var_name = NULL;
 	value = NULL;
-	while (cmds[i])
+	while (cmds[i] && cmds[i]->data.exist)
 	{
 		//if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
 		//{
@@ -121,7 +121,7 @@ int execute(char **envp)
 		cmds = init_list_commands(lexer.tokens);
 		parse_tokens(lexer.tokens, cmds, envp);
 		replace_env_vars(cmds, envp);
-		replace_env_vars(cmds, shell_env);
+		//replace_env_vars(cmds, shell_env);
 		block_signals();
 		execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens));
 		destroy_tokens(lexer.tokens);

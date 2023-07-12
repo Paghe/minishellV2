@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   control.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 20:04:10 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/03 17:19:48 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/12 17:01:03 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	cntr_handler(int signum)
 	if (signum == SIGINT)
 		write(1, "\n", 1);
 	//rl_on_new_line();
-	// // rl_replace_line("", 0);
+	//rl_replace_line("", 0);
 	//rl_redisplay();
 }
 

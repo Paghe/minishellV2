@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 11:27:05 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/04 00:21:57 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/11 16:58:20 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	unset(char ***envp, char *var_name)
 
 	i = 0;
 	sucess = 0;
+	if (!var_name)
+		return (sucess);
 	while ((*envp)[i])
 	{
 		if (ft_strnstr((*envp)[i], var_name, ft_strlen(var_name)) == (*envp)[i])

@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/07 01:37:58 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/11 18:52:33 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 	int	pid;
 
 	(void)all;
-	if (if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
+	if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
 	{
 		built_in(*red, envp, shell_env);
 		if ((*red)->data.pipe_in != -1)
@@ -74,7 +74,7 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 		//	free(tmp2);
 		//	exit(0);
 		//  }
-    if (if_is_builtin((*red)->cmds[0]))
+    if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]))
     {
     	built_in(*red, envp, shell_env);
 		exit(0);

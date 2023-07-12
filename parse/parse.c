@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/10 19:17:22 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/11 19:03:47 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,13 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 				if (current->next && is_the_word(current->next))
 					current = current->next;
 			}
-			if(current->next && is_the_word(current->next))
+			if ((current->type == LESS) && (current->next && is_the_word(current->next)))
 			{
 				if (cmds[i]->data.input)
 					free(cmds[i]->data.input);
 				cmds[i]->data.input = ft_strdup(current->next->token);
-				current = current->next;
+				if (current->next && is_the_word(current->next))
+					current = current->next;
 			}
 			if (flag == 1)
 				cmds[i]->data.is_redir_first = 1;
@@ -135,6 +136,8 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 					fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 				close(fd);
 				current = current->next;
+				if (current->next && is_the_word(current->next))
+					cmds[i]->data.exist = 1;
 			}
 		}
 		else
@@ -143,6 +146,12 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 			if (cmds[i]->data.env)
 				free(cmds[i]->data.env);
 			cmds[i]->cmds[j] = ft_strdup(current->token);
+			cmds[i]->data.exist = 1;
+			char *tmp = ft_strtrim(cmds[i]->cmds[0], "\"");
+			if (cmds[i]->cmds[0])
+				free(cmds[i]->cmds[0]);
+			cmds[i]->cmds[0] = ft_strdup(tmp);
+			free(tmp);
 			cmds[i]->data.env = get_env_path(envp, cmds[i]->cmds[0]);
 			j++;
 			cmds[i]->cmds[j] = NULL;
@@ -160,8 +169,9 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	int		i;
 	int		j;
 	char	*arg;
-	char	*value;
 	int		dollars;
+	char	*dollar_str;
+	char	*new_val;
 
 	i = 0;
 	while (cmds[i])
@@ -172,29 +182,42 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 		//	i++;
 		//	continue ;
 		//}
-		while (cmds[i]->cmds[j])
+		if (cmds[i]->data.is_updated == 0)
 		{
-			arg = cmds[i]->cmds[j];
-			dollars = count_dollars(arg);
-			if ((arg = ft_strrchr(arg, '$')) && dollars % 2 != 0)
+			while (cmds[i]->cmds[j] && cmds[i]->data.exist)
 			{
-				if (*(arg + 1) == '?')
-					value = ft_itoa(EXIT_C);
-				else
-					value = get_env_var(arg + 1, envp);
-				if (!value)
-					cmds[i]->cmds[j] = ft_strdup("");
-				else
+				arg = ft_strdup(cmds[i]->cmds[j]);
+				dollars = count_dollars(arg);
+				new_val = get_next_var(arg, envp);
+				if (dollars % 2 != 0 && new_val != NULL)
 				{
-					arg = ft_strdup2(cmds[i]->cmds[j], dollars - 1);
-					value = ft_strjoin(arg, value);
-					free(arg);
-					free(cmds[i]->cmds[j]);
-					cmds[i]->cmds[j] = ft_strdup(value);
-					free(value);
+					cmds[i]->data.is_updated = 1;
+					if (*(arg + 1) == '?')
+					{
+						free(cmds[i]->cmds[j]);
+						cmds[i]->cmds[j] = ft_itoa(EXIT_C);
+					}
+					else
+					{
+						dollar_str = ft_strdup2(cmds[i]->cmds[j], dollars - 1);
+						free(cmds[i]->cmds[j]);
+						cmds[i]->cmds[j] = ft_strjoin(dollar_str, new_val);
+						free(dollar_str);
+					}
 				}
-			}
-			j++;
+				//else if (dollars % 2 == 0 && new_val != NULL)
+				//{
+				//	dollar_str = ft_strdup2(cmds[i]->cmds[j], dollars);
+				//	printf("value: %s\n", new_val);
+				//	free(cmds[i]->cmds[j]);
+				//	cmds[i]->cmds[j] = ft_strjoin(dollar_str, new_val);
+				//	printf("join: %s\n", cmds[i]->cmds[j]);
+				//	free(dollar_str);
+				//}
+				free(arg);
+				free(new_val);
+				j++;
+			}	
 		}
 		i++;
 	}
@@ -217,7 +240,8 @@ void	free_parse(t_cmds **cmds)
 		//}
 		while (cmds[i]->cmds && cmds[i]->cmds[j])
 		{
-			free(cmds[i]->cmds[j]);
+			if (cmds[i]->data.exist)
+				free(cmds[i]->cmds[j]);
 			j++;
 		}
 		if (cmds[i]->cmds)

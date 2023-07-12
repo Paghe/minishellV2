@@ -1,5 +1,5 @@
 FLAGS = -Wall -Wextra -Werror #-I $(shell brew --prefix readline)/include
-#FLAGS += -g -fsanitize=address 
+FLAGS += -g -fsanitize=address 
 
 NAME = minishell
 
@@ -32,6 +32,7 @@ SRC = main.c \
 	builtin/unset.c \
 	builtin/export.c \
 	execution/execution.c \
+	parse/env_vars_check.c
 
 OBJ = $(SRC:.c=.o)
 

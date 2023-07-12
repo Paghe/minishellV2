@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/06 17:09:53 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:46:21 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ typedef struct s_data
 	int			pipe_out;
 	int			is_append;
 	int			is_redir_first;
+	int			is_updated;
+	int			out_redir_first;
+	int			exist;
 }	t_data;
 
 typedef struct s_cmds
@@ -92,5 +95,6 @@ int		count_env_vars(char **envp);
 void	export(char **cmds, char ***env, char ***shell_env);
 char	*ft_strdup2(const char *s1, int stop);
 void	here_doc(t_token *token, t_cmds *cmds);
+char	*get_next_var(char *var, char **envp);
 
 #endif

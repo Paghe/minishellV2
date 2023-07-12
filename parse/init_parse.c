@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_parse.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 14:34:12 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/22 14:36:39 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:48:13 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ t_cmds	**init_list_commands(t_tokens *tokens)
 		cmds[i]->data.fd_out = -1;
 		cmds[i]->data.is_append = 0;
 		cmds[i]->data.is_redir_first = 0;
+		cmds[i]->data.is_updated = 0;
+		cmds[i]->data.out_redir_first = 0;
+		cmds[i]->data.exist = 0;
 		if (current)
 			current = current->next;
 		i++;

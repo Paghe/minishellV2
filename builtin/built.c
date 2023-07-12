@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:15:04 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/12 17:47:17 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/12 19:13:30 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,45 @@ int	if_is_builtin(char *cmd)
 	return (free(check_format), 0);
 }
 
+int	is_number(char *str)
+{
+	while (*str)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		str++;
+	}
+	return (1);
+}
+
 int	built_in(t_cmds *cmds, char ***env, char ***shell_envp)
 {
 	int	flag;
+	int	i;
+	char *tmp;
+	char	*exit_msg;
 
 	flag = 0;
 	if (ft_memcmp(cmds->cmds[0], "exit", 5) == 0)
 	{
 			EXIT_C = -1;
+			i = 0;
+			while(cmds->cmds[i])
+				i++;
+			if (i > 1 && !is_number(cmds->cmds[1]))
+			{
+				tmp = ft_strjoin("minishell: exit: ",cmds->cmds[1]);
+				exit_msg = ft_strjoin(tmp, ": numeric argument required");
+				ft_putendl_fd(exit_msg, 2);
+				free(tmp);
+				free(exit_msg);
+				EXIT_C = 0;
+			}
+			else if (i > 2)
+			{
+				ft_putendl_fd("minishell: exit: too many arguments", 2);
+				EXIT_C = 0;
+			}
 			flag = 1;
 	}
 	if (ft_memcmp(cmds->cmds[0], "export", 7) == 0)

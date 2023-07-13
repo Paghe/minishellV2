@@ -6,12 +6,14 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 13:12:06 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/11 16:21:33 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/12 20:20:33 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/control.h"
 #include "../include/parse.h"
+
+int	EXIT_C;
 
 char	*get_next_var(char *var, char **envp)
 {
@@ -34,6 +36,8 @@ char	*get_next_var(char *var, char **envp)
 	final = NULL;
 	while (start[i])
 	{
+		if (start[i][0] ==  '?')
+			return (ft_strdup(ft_itoa(EXIT_C)));
 		if (start[i][0] != '\"')
 		{
 			final = ft_strjoin(final, get_env_var(start[i], envp));
@@ -52,4 +56,3 @@ char	*get_next_var(char *var, char **envp)
 	}
 	return (final);
 }
-

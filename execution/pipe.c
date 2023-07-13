@@ -6,13 +6,14 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/11 18:52:33 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/13 12:58:00 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/parse.h"
 
 extern char	**environ;
+int EXIT_C;
 
 int	init_pipes(t_cmds **cmds, int index)
 {
@@ -41,25 +42,28 @@ void	close_all(t_cmds **cmds)
 	}
 }
 
-void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env)
+int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env)
 {
 	int	pid;
+	int	status;
+	int	exit_st;
 
 	(void)all;
+	exit_st = 0;
 	if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
 	{
-		built_in(*red, envp, shell_env);
+		built_in(*red, envp, shell_env, &exit_st);
 		if ((*red)->data.pipe_in != -1)
 			close((*red)->data.pipe_in);
 		if ((*red)->data.pipe_out != -1)
 			close((*red)->data.pipe_out);
-		return ;
+		return (exit_st);
 	}
 	pid = fork();
 	if (pid == -1)
 	{
 		perror("pipe_process\n");
-		return ;
+		return (exit_st);
 	}
 	if (pid == 0)
 	{
@@ -72,12 +76,12 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 		//	ft_putendl_fd(tmp2, 2);
 		//	free(tmp);
 		//	free(tmp2);
-		//	exit(0);
+		//	exit_st(0);
 		//  }
     if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]))
     {
-    	built_in(*red, envp, shell_env);
-		exit(0);
+    	built_in(*red, envp, shell_env, &exit_st);
+		exit(exit_st);
     }
     else
     {
@@ -101,7 +105,7 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 		//  {
 		//	char	*tmp[3] = {"/usr/bin/echo", "-n", NULL};
 		//	if (execve("/usr/bin/echo", tmp, *envp) == -1)
-		//		exit(0);
+		//		exit_st(0);
 		//  }
 		  (*red)->cmds = escape_quotes_cmds((*red)->cmds);
 		 if (ft_strncmp((*red)->cmds[0], "./", 2) == 0)
@@ -134,5 +138,16 @@ void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, ch
 		close((*red)->data.pipe_in);
 	if ((*red)->data.pipe_out != -1)
 		close((*red)->data.pipe_out);
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &status, 0);
+	//printf("exit status2: %i\n", WEXITSTATUS(status));
+	if (WEXITSTATUS(status) == 255)
+		EXIT_C = 127;
+	if (WEXITSTATUS(status) == 1)
+		EXIT_C = 1;
+	if (WEXITSTATUS(status) == 0)
+		EXIT_C = 0;
+	if (WEXITSTATUS(status) == 15)
+		return (15);
+	else
+		return (0);
 }

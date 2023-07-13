@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:15:04 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/12 19:13:30 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/13 12:52:02 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	is_number(char *str)
 	return (1);
 }
 
-int	built_in(t_cmds *cmds, char ***env, char ***shell_envp)
+int	built_in(t_cmds *cmds, char ***env, char ***shell_envp, int *exit)
 {
 	int	flag;
 	int	i;
@@ -66,7 +66,6 @@ int	built_in(t_cmds *cmds, char ***env, char ***shell_envp)
 	flag = 0;
 	if (ft_memcmp(cmds->cmds[0], "exit", 5) == 0)
 	{
-			EXIT_C = -1;
 			i = 0;
 			while(cmds->cmds[i])
 				i++;
@@ -84,6 +83,7 @@ int	built_in(t_cmds *cmds, char ***env, char ***shell_envp)
 				ft_putendl_fd("minishell: exit: too many arguments", 2);
 				EXIT_C = 0;
 			}
+			*exit = 15;
 			flag = 1;
 	}
 	if (ft_memcmp(cmds->cmds[0], "export", 7) == 0)

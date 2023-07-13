@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 11:27:05 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/11 16:58:20 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/13 12:41:52 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "../include/control.h"
 
 extern char	**environ;
+int	EXIT_C;
 
 // void	print_env(char **envp)
 // {
@@ -53,6 +54,8 @@ int	unset(char ***envp, char *var_name)
 		}
 		i++;
 	}
+	if (!sucess)
+		EXIT_C = 1;
 	return (sucess);
 }
 

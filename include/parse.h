@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/11 18:46:21 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/13 12:16:02 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,7 @@ void	redirect_io(int input, int output);
 int		begin_with_pipes(t_token *token);
 int		init_pipes(t_cmds **cmds, int index);
 void	close_all(t_cmds **cmds);
-void	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all, \
-						int n_commands, char ***shell_env);
+int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env);
 int		is_env_var(char *word, char	**var_name, char **value);
 char	*get_env_var(char *var_name, char **envp);
 void	replace_env_vars(t_cmds **cmds, char **envp);
@@ -79,7 +78,7 @@ void	free_env(char **envp);
 int		if_is_builtin(char *cmd);
 int		is_echo_newline(char *current);
 int		only_echo(t_cmds **cmds);
-int		built_in(t_cmds *cmds, char ***env, char ***shell_envp);
+int		built_in(t_cmds *cmds, char ***env, char ***shell_envp, int *exit);
 int		echo(t_cmds *cmds);
 int		change_dir(char **env, t_cmds *cmds);
 int		go_to_user(t_cmds *cmds, char *dir, char **env);

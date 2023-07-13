@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/11 18:59:04 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/13 12:54:40 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,18 @@ char	**copy_env(char **envp)
 	return (new_envp);
 }
 
-void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
+int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 {
 	int		i;
 	char	*var_name;
 	char	*value;
+	int		exit;
+
 	(void)n_commands;
 	i = 0;
 	var_name = NULL;
 	value = NULL;
+	exit = 0;
 	while (cmds[i] && cmds[i]->data.exist)
 	{
 		//if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
@@ -59,11 +62,14 @@ void execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands
 		//	free(value);
 		//}
 		//else
-			pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
+			exit = pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
 		if (cmds[i]->data.env)
 			free(cmds[i]->data.env);
 		i++;
+		if (exit == 15)
+			break ;
 	}
+	return (exit);
 }
 
 void	check_redir(t_cmds **cmds)
@@ -88,9 +94,11 @@ int execute(char **envp)
 	t_cmds **cmds;
 	char *input;
 	char **shell_env;
+	int		exit;
 
 	cmds = NULL;
 	shell_env = copy_env(envp);
+	exit = 0;
 	while (1)
 	{
 		signal(SIGINT, cntr_handler);
@@ -102,7 +110,6 @@ int execute(char **envp)
 			input = ft_strtrim(get_next_line(STDIN_FILENO), "\n");
 		if (!input)
 		{
-			EXIT_C = -1;
 			break;
 		}
 		if (input && input[0] == '\0')
@@ -114,19 +121,19 @@ int execute(char **envp)
 		parsing(&lexer, ft_strdup(input));
 		free(input);
 		if (!get_grammar(lexer.tokens))
+			EXIT_C = 2;
+		else
 		{
-			destroy_tokens(lexer.tokens);
-			return (0);
+			cmds = init_list_commands(lexer.tokens);
+			parse_tokens(lexer.tokens, cmds, envp);
+			replace_env_vars(cmds, envp);
+			//replace_env_vars(cmds, shell_env);
+			block_signals();
+			exit = execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens));
+			free_parse(cmds);
 		}
-		cmds = init_list_commands(lexer.tokens);
-		parse_tokens(lexer.tokens, cmds, envp);
-		replace_env_vars(cmds, envp);
-		//replace_env_vars(cmds, shell_env);
-		block_signals();
-		execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens));
 		destroy_tokens(lexer.tokens);
-		free_parse(cmds);
-		if (EXIT_C == -1)
+		if (exit)
 			break ;
 	}
 	free_env(shell_env);
@@ -146,6 +153,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	if ((code = execute(env_vars)) == -1)
 		EXIT_C = -1;
-	EXIT_C = 0;
+	//EXIT_C = 0;
+	//printf("exit code: %i\n", EXIT_C);
 	return (EXIT_C);
 }

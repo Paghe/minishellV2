@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 17:20:03 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/10 18:22:04 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/15 17:50:11 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,5 @@ int	space_single_symbol(char *line, char *buffer, int count, int *i)
 	buffer[count++] = ' ';
 	buffer[count++] = format_is_symbol(line[*i]);
 	buffer[count++] = ' ';
-	/* (*i)++; */
 	return (count);
 }

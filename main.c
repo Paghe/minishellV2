@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 15:08:11 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 17:38:54 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,9 +173,13 @@ int execute(char **envp)
 	return (EXIT_C);
 }
 
+void	leaks(void)
+{
+	system("leaks minishell");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	int		code;
 	char	**env_vars;
 
 	errno = 0;
@@ -183,7 +187,8 @@ int	main(int argc, char **argv, char **envp)
 	env_vars = copy_env(envp);
 	(void)argc;
 	(void)argv;
-	if ((code = execute(env_vars)) == -1)
+/* 	atexit(leaks); */
+	if ((execute(env_vars)) == -1)
 		EXIT_C = -1;
 	//EXIT_C = 0;
 	//printf("exit code: %i\n", EXIT_C);

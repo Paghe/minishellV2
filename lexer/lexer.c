@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 17:48:23 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/14 17:33:38 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 17:48:15 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,18 @@ void	token_parse(t_lexer *lexer, char *buffer, \
 
 void	parsing(t_lexer *lexer, char *input)
 {
-	int		i;
 	char	buffer[LINEBUFFER_MAX];
 	char	*line;
 	char	*buf_ptr;
 	char	*good_line;
+	char	*tmp;
 
-	i = 0;
 	line = replace_spaces(input);
 	good_line = format_line(line);
 	free(line);
-	good_line = replace_spaces(good_line);
-	good_line = ft_strtrim(good_line, " ");
+	tmp = replace_spaces(good_line);
+	good_line = ft_strtrim(tmp, " ");
+	free(tmp);
 	lexer->tokens = create_tokens();
 	buf_ptr = buffer;
 	tokenize_input_init(lexer, buffer, \

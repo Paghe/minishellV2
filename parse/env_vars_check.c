@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 13:12:06 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 15:34:11 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 16:19:20 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*next_var(char *str, char	*real_str, int *i)
 		}
 		if (quote_type != 17)
 		{
-			while (real_str && *real_str && *real_str != '\"' && (*real_str) != '\'')
+			while (real_str && *real_str && *real_str != quote_type)
 			{
 			//	if (quote_type == '\'')
 				(real_str)++;

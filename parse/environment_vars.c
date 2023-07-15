@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 13:59:13 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 02:51:13 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 16:09:10 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*remove_spaces(char *str) // check for leaks
 	return (final);
 }
 
-int	is_env_var(char *word, char	**var_name, char **value)
+int	is_env_var(char *word, char	**var_name, char **value, char **env)
 {
 	char	*after_eq;
 	int		index_bef_eq;
@@ -93,6 +93,8 @@ int	is_env_var(char *word, char	**var_name, char **value)
 		(*value) = ft_strtrim((after_eq + 1), "\'\"");
 		//printf("VALUE: %s\n", (*value));
 		(*value) = remove_spaces(ft_strdup(*value));
+		if ((*value) && (*value)[0] == '$')
+			(*value) = get_env_var((*value) + 1, env);
 		(*var_name) = ft_strdup2(word, index_bef_eq);
 		return (1);
 	}

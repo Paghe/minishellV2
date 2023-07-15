@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:15:04 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 15:18:31 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 16:29:37 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,20 @@ int	built_in(t_cmds *cmds, char ***env, char ***shell_envp, int *exit)
 				ft_putendl_fd(exit_msg, 2);
 				free(tmp);
 				free(exit_msg);
-				EXIT_C = 0;
+				EXIT_C = 255;
 			}
 			else if (i > 2)
 			{
 				ft_putendl_fd("minishell: exit: too many arguments", 2);
-				EXIT_C = 0;
+				EXIT_C = 1;
 			}
-			*exit = 15;
+			else if (i == 2)
+			{
+				EXIT_C = ft_atoi(cmds->cmds[1]);
+				*exit = 15;
+			}
+			else
+				*exit = 15;
 			flag = 1;
 	}
 	if (ft_memcmp(cmds->cmds[0], "export", 7) == 0)

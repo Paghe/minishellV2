@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/14 19:08:52 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 16:35:40 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 				(*red)->data.fd_out = open((*red)->data.output, O_WRONLY);
 			redirect_io((*red)->data.fd_in, (*red)->data.fd_out);
 		}
+		EXIT_C = 0;
 		built_in(*red, envp, shell_env, &exit_st);
 		dup2(stdout_terminal, STDOUT_FILENO);
 		dup2(stdin_terminal, STDIN_FILENO);
@@ -143,11 +144,24 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 			{
 				if (execve((*red)->cmds[0], (*red)->cmds, *envp) == -1)
 				{
-					char *tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
-					char *tmp2 = ft_strjoin(tmp, ": command not found");
+					char *tmp;
+					char *tmp2;
+					if (!access((*red)->cmds[0] + 2, F_OK) && access((*red)->cmds[0] + 2, X_OK) != 0)
+					{
+						tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
+						tmp2 = ft_strjoin(tmp, ": Permission denied");
+					}
+					else
+					{
+						tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
+						tmp2 = ft_strjoin(tmp, ": command not found");
+						
+					}
 					ft_putendl_fd(tmp2, 2);
 					free(tmp);
 					free(tmp2);
+					if (!access((*red)->cmds[0] + 2, F_OK) && access((*red)->cmds[0] + 2, X_OK) != 0)
+						exit (126);
 					exit(-1);
 				}
 			}
@@ -155,8 +169,10 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 			{
 				if (execve((char const *)(*red)->data.env, (*red)->cmds, *envp) == -1)
 				{
-					char *tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
-					char *tmp2 = ft_strjoin(tmp, ": command not found");
+					char *tmp;
+					char *tmp2;
+						tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
+						tmp2 = ft_strjoin(tmp, ": command not found");
 					ft_putendl_fd(tmp2, 2);
 					free(tmp);
 					free(tmp2);
@@ -177,6 +193,8 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 	//printf("exit status2: %i\n", WEXITSTATUS(status));
 	if (WEXITSTATUS(status) == 255)
 		EXIT_C = 127;
+	if (WEXITSTATUS(status) == 126)
+		EXIT_C = 126;
 	if (WEXITSTATUS(status) == 1)
 		EXIT_C = 1;
 	if (WEXITSTATUS(status) == 0)

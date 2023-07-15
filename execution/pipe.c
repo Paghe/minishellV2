@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 16:35:40 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 21:23:18 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,20 +83,8 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 	}
 	if (pid == 0)
 	{
-		//if (!(*red)->data.is_redir_first && (*red)->data.env == NULL)
-		//  {
-		//	char *tmp;
-		//	char *tmp2;
-		//	tmp = ft_strjoin("minishell: ",(*red)->cmds[0]);
-		//	tmp2 = ft_strjoin(tmp, ": No such file or directory");
-		//	ft_putendl_fd(tmp2, 2);
-		//	free(tmp);
-		//	free(tmp2);
-		//	exit_st(0);
-		//  }
     if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]))
     {
-		/*printf("hello\n");*/
 		if ((*red)->data.input || (*red)->data.output)
 		{
 			(*red)->data.fd_in = open((*red)->data.input, O_RDONLY);
@@ -109,6 +97,8 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 			close((*red)->data.fd_out);
 		}
 		built_in(*red, envp, shell_env, &exit_st);
+		free_env(*envp);
+		free_env(*shell_env);
 		exit(exit_st);
     }
     else
@@ -130,16 +120,8 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
         close((*red)->data.fd_in);
         close((*red)->data.fd_out);
       }
-		//  if ((*red)->data.is_redir_first)
-		//  {
-		//	char	*tmp[3] = {"/usr/bin/echo", "-n", NULL};
-		//	if (execve("/usr/bin/echo", tmp, *envp) == -1)
-		//		exit_st(0);
-		//  }
 		if ((*red)->cmds)
 			(*red)->cmds = escape_quotes_cmds((*red)->cmds);
-		//  if (ft_strncmp((*red)->cmds[0], "/bin/echo", 10))
-		//  	ptintf("PATH: %s\n", (*red)->cmds)
 		 if ((*red)->cmds[0] && ft_strncmp((*red)->cmds[0], "./", 2) == 0)
 			{
 				if (execve((*red)->cmds[0], (*red)->cmds, *envp) == -1)
@@ -171,8 +153,8 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 				{
 					char *tmp;
 					char *tmp2;
-						tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
-						tmp2 = ft_strjoin(tmp, ": command not found");
+					tmp = ft_strjoin("minishell: ", (*red)->cmds[0]);
+					tmp2 = ft_strjoin(tmp, ": command not found");
 					ft_putendl_fd(tmp2, 2);
 					free(tmp);
 					free(tmp2);
@@ -190,7 +172,6 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 	if ((*red)->data.fd_out != -1)
 		close((*red)->data.fd_out);
 	waitpid(pid, &status, 0);
-	//printf("exit status2: %i\n", WEXITSTATUS(status));
 	if (WEXITSTATUS(status) == 255)
 		EXIT_C = 127;
 	if (WEXITSTATUS(status) == 126)

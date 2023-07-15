@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:19:33 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/11 19:02:58 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 19:28:16 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,20 @@ char	*get_env_path(char **envp, char *command)
 	int		i;
 	char	**paths;
 	char	*cmd;
+	char	*tmp_path;
 
 	i = -1;
 	path = NULL;
+	tmp_path = NULL;
 	while (envp[++i])
 	{
 		if (envp[i] == ft_strnstr(envp[i], "PATH", 4))
+		{
+			if (tmp_path)
+				free(tmp_path);
 			path = ft_strdup(envp[i]);
+			tmp_path = path;
+		}
 	}
 	if (!path)
 		return (NULL);

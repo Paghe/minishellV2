@@ -39,7 +39,7 @@ OBJ = $(SRC:.c=.o)
 LIBFT = ./libft/libft.a
 GNL = ./gnl/libgnl.a
 
-LINKFLAGS = -lreadline  -L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++ #-L$(shell brew --prefix readline)/lib
+LINKFLAGS = -lreadline #-L/Users/crepou/Documents/LeakSanitizer -llsan -lc++ #-L$(shell brew --prefix readline)/lib
 
 all: 
 	$(MAKE) $(NAME) -j

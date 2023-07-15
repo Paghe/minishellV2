@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 15:08:29 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 20:51:19 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,16 +273,15 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 	char	*new_val;
 	char	*variable;
 	char	*final;
+	char	*tmp_variable;
+	char	*tmp_arg;
+	char	*tmp_final;
+	char	*tmp_commands;
 
 	i = 0;
 	while (cmds[i])
 	{
 		j = 0;
-		//if (cmds[i]->data.is_redir_first == 1)
-		//{
-		//	i++;
-		//	continue ;
-		//}
 		if (cmds[i]->data.is_updated == 0)
 		{
 			while (cmds[i]->cmds[j] && cmds[i]->data.exist)
@@ -290,69 +289,71 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 				final = NULL;
 				if ((ft_strnstr(cmds[i]->cmds[j], "-n", ft_strlen(cmds[i]->cmds[j]))) || is_assign(cmds[i]->cmds[j]))
 				{
-					//printf("hello\n");
 					j++;
 					continue ;
 				}
 				arg = ft_strdup(cmds[i]->cmds[j]);
-				//char *new_var = replace_var(arg);
+				tmp_arg = arg;
 				int k = 0;
-				//printf("COMMAND: %s start with dollar: %i\n", cmds[i]->cmds[j], cmds[i]->cmds[j][0] == '$');
 				if (j > 0 || cmds[i]->cmds[j][0] == '$')
 				{
-					char *arg2= ft_strdup(arg);
-					if (*arg2 == '?')
-						arg2 = arg2 + 1;
-					int sum = ft_strlen(arg2);
+					if (*arg == '?')
+						arg = arg + 1;
+					int sum = ft_strlen(arg);
+					tmp_commands = cmds[i]->cmds[j];
 					while(sum > -1)
 					{
-						variable = next_var(arg2, arg2, &k);
-						//printf("NEXT VAR: %s\n", variable);
-						dollars = count_dollars(arg2);
+						variable = next_var(arg, arg, &k);
+						dollars = count_dollars(arg);
 						if (k == -1)
 							break;
 						sum -= k;
-						arg2 = arg2 + k;
+						arg = arg + k;
 						new_val = get_next_var(variable, envp);
-						//printf("new_val: %s\n", new_val);
 						if (dollars % 2 != 0 && new_val != NULL)
 						{
 							cmds[i]->data.is_updated = 1;
 							dollar_str = ft_strdup2(cmds[i]->cmds[j], dollars - 1);
-							//free(cmds[i]->cmds[j]);
 							char	*tmp = ft_strjoin(dollar_str, new_val);
-							//printf("TMP: %s\n", tmp);
+							tmp_final = final;
 							final = ft_strjoin(final, tmp);
+							if (tmp_final)
+								free(tmp_final);
+							if (tmp)
+								free(tmp);
 							free(dollar_str);
 						}
 						if (!new_val)
 						{
+							tmp_variable = variable;
 							variable = remove_char_from_word(variable, '\"');
+							if (tmp_variable)
+								free(tmp_variable);
+							tmp_variable = variable;
 							char *tmp = put_dollar_back(variable);
 							variable = next_dollar(tmp);
+							if (tmp_variable)
+								free(tmp_variable);
+							tmp_final = final;
 							final = ft_strjoin(final, variable);
+							if (tmp_final)
+								free(tmp_final);
 						}
-						//printf("replaced_command: %s\n", final);
-						free(cmds[i]->cmds[j]);
+						if (variable)
+							free(variable);
+						if (tmp_commands)
+							free(tmp_commands);
 						cmds[i]->cmds[j] = ft_strdup(final);
+						tmp_commands = cmds[i]->cmds[j];
 						k = 0;
 					}
 					if (new_val)
 						free(new_val);
-					//printf("AFTER: %s\n", cmds[i]->cmds[j]);
+					if (final)
+						free(final);
 				}
-				
-				//else if (dollars % 2 == 0 && new_val != NULL)
-				//{
-				//	dollar_str = ft_strdup2(cmds[i]->cmds[j], dollars);
-				//	printf("value: %s\n", new_val);
-				//	free(cmds[i]->cmds[j]);
-				//	cmds[i]->cmds[j] = ft_strjoin(dollar_str, new_val);
-				//	printf("join: %s\n", cmds[i]->cmds[j]);
-				//	free(dollar_str);
-				//}
-				if (arg)
-					free(arg);
+				if (tmp_arg)
+					free(tmp_arg);
 				j++;
 			}	
 		}

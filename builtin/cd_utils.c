@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 17:04:46 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/06 18:45:52 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/15 18:40:25 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	change_old(char **env)
 {
 	int		i;
 	char	*old;
+	char	*tmp;
 
 	i = 0;
 	old = getcwd(NULL, 0);
@@ -26,8 +27,11 @@ void	change_old(char **env)
 	{
 		if (!ft_strncmp(env[i], "OLDPWD=", ft_strlen("OLDPWD=")))
 		{
+			tmp = ft_strjoin("OLDPWD=", old);
+			free(env[i]);
 			env[i] = ft_strjoin("OLDPWD=", old);
 			free(old);
+			free(tmp);
 			return ;
 		}
 		i++;
@@ -59,6 +63,7 @@ void	change_current_pwd(char **env)
 {
 	char	*current;
 	int		i;
+	char	*tmp;
 
 	i = 0;
 	current = getcwd(NULL, 0);
@@ -68,8 +73,11 @@ void	change_current_pwd(char **env)
 	{
 		if (!ft_strncmp(env[i], "PWD=", ft_strlen("PWD=")))
 		{
+			tmp = ft_strjoin("PWD=", current);
+			free(env[i]);
 			env[i] = ft_strjoin("PWD=", current);
 			free(current);
+			free(tmp);
 			return ;
 		}
 		i++;

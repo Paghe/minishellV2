@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 17:38:54 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/15 20:21:13 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,31 @@ char	**copy_env(char **envp)
 	i = 0;
 	count = count_env_vars(envp);
 	new_envp = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!new_envp)
+		return (NULL);
 	while (i < count)
 	{
 		new_envp[i] = ft_strdup(envp[i]);
+		if (!new_envp[i])
+			return (new_envp);
 		i++;
 	}
 	new_envp[i] = NULL;
 	return (new_envp);
+}
+
+void	free_after_split(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	if (str)
+		free(str);
 }
 
 int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
@@ -49,20 +67,6 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 	exit = 0;
 	while (cmds[i])
 	{
-		//if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
-		//{
-		//	ft_putendl_fd("minishell: .: filename argument required\n.: usage: . filename [arguments]", 2);
-		//	i++;
-		//	continue;
-		//}
-		//if (!cmds[i]->data.is_redir_first && is_env_var(cmds[i]->cmds[0], &var_name, &value) == 1)
-		//{
-		//	set_env_var(shell_env, var_name, value);
-		//	free(var_name);
-		//	free(value);
-		//}
-		//else
-		
 		if (cmds[i]->cmds[0])
 		{
 			if (ft_strncmp(cmds[i]->cmds[0], "/bin/echo ", 10) == 0)
@@ -81,6 +85,7 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 					replaced_commands[k] = ft_strdup(new_cmds[k]);
 					k++;
 				}
+				free_after_split(new_cmds);
 				j = 1;
 				while(cmds[i]->cmds[j])
 				{
@@ -89,10 +94,9 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 					k++;
 				}
 				replaced_commands[k] = NULL;
-				free(cmds[i]->cmds);
+				free_after_split(cmds[i]->cmds);
 				cmds[i]->cmds = replaced_commands;
 			}
-			
 			exit = pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
 		}
 		if (cmds[i]->data.env)

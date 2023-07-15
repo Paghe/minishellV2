@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 14:34:12 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/11 18:48:13 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/14 19:08:33 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_cmds	**init_list_commands(t_tokens *tokens)
 	total_commands = count_commands(tokens);
 	cmds = malloc(sizeof(t_cmds *) * (total_commands + 1));
 	current = tokens->front;
+	int j = 0;
 	while (i < total_commands)
 	{
 		cmds[i] = malloc(sizeof(t_cmds));
@@ -34,8 +35,12 @@ t_cmds	**init_list_commands(t_tokens *tokens)
 			current = current->next;
 		}
 		cmds[i]->cmds = malloc(sizeof(char *) * (len + 1));
-		if (cmds[i]->cmds)
-			cmds[i]->cmds[len] = NULL;
+		j = 0;
+		while (cmds[i]->cmds[j] && j < len)
+		{
+			cmds[i]->cmds[j] = NULL;
+			j++;	
+		}
 		cmds[i]->data.input = NULL;
 		cmds[i]->data.output = NULL;
 		cmds[i]->data.env = NULL;

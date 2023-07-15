@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/01 19:15:04 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/13 12:52:02 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 15:18:31 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,13 @@ int	if_is_builtin(char *cmd)
 		i++;
 	}
 	i = 0;
+	//printf("CMD: %s\n", cmd);
 	check_format = escape_quote(cmd);
+	if (!ft_strncmp(check_format, "/bin/echo", 10))
+    {
+        free(check_format);
+        check_format = ft_strdup("echo");
+    }
 	if (!ft_strncmp(check_format, "echo", 5))
 		return (free(check_format), 1);
 	if (!ft_memcmp(check_format, "cd", 3))
@@ -99,9 +105,9 @@ int	built_in(t_cmds *cmds, char ***env, char ***shell_envp, int *exit)
 	}
 	if (echo(cmds))
 		flag = 1;
-	if (change_dir(*env, cmds))
+	if (change_dir(*shell_envp, cmds))
 		flag = 1;
-	if (get_env(cmds, *env))
+	if (get_env(cmds, *shell_envp))
 		flag = 1;
 	if (build_pwd(cmds))
 		flag = 1;

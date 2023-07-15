@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/13 12:16:02 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/14 19:59:48 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,8 @@ void	export(char **cmds, char ***env, char ***shell_env);
 char	*ft_strdup2(const char *s1, int stop);
 void	here_doc(t_token *token, t_cmds *cmds);
 char	*get_next_var(char *var, char **envp);
+char	*remove_char_from_word(char *str, char c);
+char	*put_dollar_back(char *str);
+char	*next_var(char *str, char	*real_str, int *i);
 
 #endif

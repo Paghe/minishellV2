@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/13 12:58:00 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/14 19:08:52 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,27 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 	int	pid;
 	int	status;
 	int	exit_st;
+	int	stdin_terminal;
+	int	stdout_terminal;
 
 	(void)all;
 	exit_st = 0;
 	if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
 	{
+		stdout_terminal = dup(STDOUT_FILENO);
+		stdin_terminal = dup(STDIN_FILENO);
+		if ((*red)->data.input || (*red)->data.output)
+		{
+			(*red)->data.fd_in = open((*red)->data.input, O_RDONLY);
+			if ((*red)->data.is_append)
+				(*red)->data.fd_out = open((*red)->data.output, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			else
+				(*red)->data.fd_out = open((*red)->data.output, O_WRONLY);
+			redirect_io((*red)->data.fd_in, (*red)->data.fd_out);
+		}
 		built_in(*red, envp, shell_env, &exit_st);
+		dup2(stdout_terminal, STDOUT_FILENO);
+		dup2(stdin_terminal, STDIN_FILENO);
 		if ((*red)->data.pipe_in != -1)
 			close((*red)->data.pipe_in);
 		if ((*red)->data.pipe_out != -1)
@@ -80,16 +95,29 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 		//  }
     if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]))
     {
-    	built_in(*red, envp, shell_env, &exit_st);
+		/*printf("hello\n");*/
+		if ((*red)->data.input || (*red)->data.output)
+		{
+			(*red)->data.fd_in = open((*red)->data.input, O_RDONLY);
+			if ((*red)->data.is_append)
+				(*red)->data.fd_out = open((*red)->data.output, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			else
+				(*red)->data.fd_out = open((*red)->data.output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			redirect_io((*red)->data.fd_in, (*red)->data.fd_out);
+			close((*red)->data.fd_in);
+			close((*red)->data.fd_out);
+		}
+		built_in(*red, envp, shell_env, &exit_st);
 		exit(exit_st);
     }
     else
     {
-      if ((*red)->data.pipe_in != -1)
+		if ((*red)->data.pipe_in != -1)
         dup2((*red)->data.pipe_in, READ_END);
       if ((*red)->data.pipe_out != -1)
         dup2((*red)->data.pipe_out, WRITE_END);
       close_all(all);
+	  
       if ((*red)->data.input || (*red)->data.output)
       {
         (*red)->data.fd_in = open((*red)->data.input, O_RDONLY);
@@ -107,8 +135,11 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 		//	if (execve("/usr/bin/echo", tmp, *envp) == -1)
 		//		exit_st(0);
 		//  }
-		  (*red)->cmds = escape_quotes_cmds((*red)->cmds);
-		 if (ft_strncmp((*red)->cmds[0], "./", 2) == 0)
+		if ((*red)->cmds)
+			(*red)->cmds = escape_quotes_cmds((*red)->cmds);
+		//  if (ft_strncmp((*red)->cmds[0], "/bin/echo", 10))
+		//  	ptintf("PATH: %s\n", (*red)->cmds)
+		 if ((*red)->cmds[0] && ft_strncmp((*red)->cmds[0], "./", 2) == 0)
 			{
 				if (execve((*red)->cmds[0], (*red)->cmds, *envp) == -1)
 				{
@@ -138,6 +169,10 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 		close((*red)->data.pipe_in);
 	if ((*red)->data.pipe_out != -1)
 		close((*red)->data.pipe_out);
+	if ((*red)->data.fd_in != -1)
+		close((*red)->data.fd_in);
+	if ((*red)->data.fd_out != -1)
+		close((*red)->data.fd_out);
 	waitpid(pid, &status, 0);
 	//printf("exit status2: %i\n", WEXITSTATUS(status));
 	if (WEXITSTATUS(status) == 255)

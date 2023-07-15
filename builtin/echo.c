@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:27:24 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/03 19:42:40 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/14 19:14:37 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	print_echo(t_cmds **cmds, int i)
 {
 	while (cmds[0]->cmds[i])
 	{
-		no_quote(*cmds);
+		if (ft_strnstr(cmds[0]->cmds[i], "-n", ft_strlen(cmds[0]->cmds[i])))
+			no_quote(*cmds);
 		if (cmds[0]->data.pipe_out != -1)
 			ft_putstr_fd(cmds[0]->cmds[i], cmds[0]->data.pipe_out);
 		else
@@ -54,7 +55,8 @@ void	echo_with_arg(t_cmds **cmds, int no_newline, int i)
 				cmds[0]->cmds[i][0] != '\'' && \
 					!ft_memcmp(cmds[0]->cmds[i], "-n", 2))
 		{
-			no_quote(*cmds);
+			if (ft_strnstr(cmds[0]->cmds[i], "-n", ft_strlen(cmds[0]->cmds[i])))
+				no_quote(*cmds);
 			if (!ft_memcmp(cmds[0]->cmds[i], "-n", 2))
 			{
 				if (is_echo_newline(cmds[0]->cmds[i]))
@@ -87,8 +89,13 @@ void	echo_newline(t_cmds **cmds)
 	echo_with_arg(cmds, no_newline, i);
 }
 
-int	echo(t_cmds *cmds)
+int echo(t_cmds *cmds)
 {
-	echo_newline(&cmds);
-	return (1);
+    if (!ft_strncmp(cmds[0].cmds[0], "/bin/echo", 10))
+    {
+        free(cmds[0].cmds[0]);
+        cmds[0].cmds[0] = ft_strdup("echo");
+    }
+    echo_newline(&cmds);
+    return (1);
 }

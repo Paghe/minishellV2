@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 13:59:13 by crepou            #+#    #+#             */
-/*   Updated: 2023/06/20 13:23:56 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 02:51:13 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,48 @@ char	*ft_strdup2(const char *s1, int stop)
 	return (s2);
 }
 
+char	*remove_spaces(char *str) // check for leaks
+{
+	char	**after;
+	char	*tmp;
+	int		i;
+	char	*final;
+	int		count;
+	int		end_with_space;
+
+	i = 0;
+	if (!str)
+		return (NULL);
+	final = NULL;
+	if (*str && *str == ' ')
+		final = " ";
+	after = ft_split(str, ' ');
+	count = 0;
+	while (str[i])
+		i++;
+	end_with_space = 0;
+	if (str[i - 1] == ' ')
+		end_with_space = 1;
+	//printf("str: %c end_with_sp: %d\n", str[i - 1], end_with_space);
+	i = 0;
+	while (after[count])
+		count++;
+	while (after[i])
+	{
+		final = ft_strjoin(final, after[i]);
+		tmp = final;
+		if (i < count - 1 || end_with_space)
+		{
+			final = ft_strjoin(final, " ");
+			if (tmp)
+				free(tmp);
+			tmp = final;
+		}
+		i++;
+	}
+	return (final);
+}
+
 int	is_env_var(char *word, char	**var_name, char **value)
 {
 	char	*after_eq;
@@ -49,6 +91,8 @@ int	is_env_var(char *word, char	**var_name, char **value)
 	{
 		index_bef_eq = after_eq - word;
 		(*value) = ft_strtrim((after_eq + 1), "\'\"");
+		//printf("VALUE: %s\n", (*value));
+		(*value) = remove_spaces(ft_strdup(*value));
 		(*var_name) = ft_strdup2(word, index_bef_eq);
 		return (1);
 	}

@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/13 12:54:40 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/15 15:08:11 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 	var_name = NULL;
 	value = NULL;
 	exit = 0;
-	while (cmds[i] && cmds[i]->data.exist)
+	while (cmds[i])
 	{
 		//if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
 		//{
@@ -62,7 +62,39 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 		//	free(value);
 		//}
 		//else
+		
+		if (cmds[i]->cmds[0])
+		{
+			if (ft_strncmp(cmds[i]->cmds[0], "/bin/echo ", 10) == 0)
+			{
+				char **new_cmds = ft_split(cmds[i]->cmds[0], ' ');
+				int k = 0;
+				while (new_cmds && new_cmds[k])
+					k++;
+				int j = 1;
+				while(cmds[i]->cmds[j])
+					j++;
+				char	**replaced_commands = (char **)malloc(sizeof(char *)* (k + j + 1));
+				k = 0;
+				while (new_cmds[k])
+				{
+					replaced_commands[k] = ft_strdup(new_cmds[k]);
+					k++;
+				}
+				j = 1;
+				while(cmds[i]->cmds[j])
+				{
+					replaced_commands[k] = ft_strdup(cmds[i]->cmds[j]);
+					j++;
+					k++;
+				}
+				replaced_commands[k] = NULL;
+				free(cmds[i]->cmds);
+				cmds[i]->cmds = replaced_commands;
+			}
+			
 			exit = pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
+		}
 		if (cmds[i]->data.env)
 			free(cmds[i]->data.env);
 		i++;
@@ -126,8 +158,8 @@ int execute(char **envp)
 		{
 			cmds = init_list_commands(lexer.tokens);
 			parse_tokens(lexer.tokens, cmds, envp);
-			replace_env_vars(cmds, envp);
-			//replace_env_vars(cmds, shell_env);
+			//replace_env_vars(cmds, envp);
+			replace_env_vars(cmds, shell_env);
 			block_signals();
 			exit = execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens));
 			free_parse(cmds);

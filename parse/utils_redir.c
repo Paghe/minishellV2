@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_redir.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 14:47:20 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/19 16:59:15 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/14 18:15:11 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	redirect_io(int input, int output)
 {
 	if (input)
+	{
 		dup2(input, STDIN_FILENO);
+	}	
 	if (output)
 		dup2(output, STDOUT_FILENO);
 }

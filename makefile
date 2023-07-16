@@ -17,11 +17,13 @@ SRC = main.c \
 	builtin/pwd.c \
 	builtin/utils_builtin.c \
 	builtin/built.c \
+	builtin/unset_utils.c \
 	parse/parse.c	\
 	parse/grammar.c	\
 	parse/utils_parse.c \
 	parse/utils_parse_two.c \
 	parse/init_parse.c \
+	parse/utils_parse_env.c \
 	control_commands/control.c \
 	execution/redirection_utils.c \
 	execution/input_redirection.c \
@@ -32,8 +34,7 @@ SRC = main.c \
 	parse/environment_vars.c \
 	builtin/unset.c \
 	builtin/export.c \
-	execution/execution.c \
-	parse/env_vars_check.c
+	parse/env_vars_check.c \
 
 OBJ = $(SRC:.c=.o)
 

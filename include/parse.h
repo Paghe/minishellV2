@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/16 16:06:24 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/16 21:22:42 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	redirect_io(int input, int output);
 int		begin_with_pipes(t_token *token);
 int		init_pipes(t_cmds **cmds, int index);
 void	close_all(t_cmds **cmds);
-int		pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env);
+int		pipe_proccess(t_cmds **red, char ***envp, t_cmds **all, \
+							int n_commands, char ***shell_env);
 int		is_env_var(char *word, char	**var_name, char **value, char **env);
 char	*get_env_var(char *var_name, char **envp);
 void	replace_env_vars(t_cmds **cmds, char **envp);
@@ -84,6 +85,8 @@ int		if_is_builtin(char *cmd);
 int		is_echo_newline(char *current);
 int		only_echo(t_cmds **cmds);
 int		built_in(t_cmds *cmds, char ***env, char ***shell_envp, int *exit);
+int		if_is_exit(t_cmds *cmds, int flag, int *exit);
+int		exit_format(int i, t_cmds *cmds, int flag, int *exit);
 int		echo(t_cmds *cmds);
 int		change_dir(char **env, t_cmds *cmds);
 int		go_to_user(t_cmds *cmds, char *dir, char **env);
@@ -97,6 +100,7 @@ int		pwd_goes_void(char **env, t_cmds *cmds);
 int		is_void_pwd(t_cmds *cmds);
 int		count_env_vars(char **envp);
 void	export(char **cmds, char ***env, char ***shell_env);
+int		unset_env_get(char ***envp, char *var_name, int sucess);
 char	*ft_strdup2(const char *s1, int stop);
 void	here_doc(t_token *token, t_cmds *cmds);
 char	*get_next_var(char *var, char **envp);

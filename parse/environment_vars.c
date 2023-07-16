@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   environment_vars.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 13:59:13 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 16:09:10 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 21:19:55 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/parse.h"
 #include "../include/control.h"
 
-extern char **environ;
+extern char	**environ;
 
 char	*ft_strdup2(const char *s1, int stop)
 {
@@ -37,7 +37,7 @@ char	*ft_strdup2(const char *s1, int stop)
 	return (s2);
 }
 
-char	*remove_spaces(char *str) // check for leaks
+char	*remove_spaces(char *str)
 {
 	char	**after;
 	char	*tmp;
@@ -59,7 +59,6 @@ char	*remove_spaces(char *str) // check for leaks
 	end_with_space = 0;
 	if (str[i - 1] == ' ')
 		end_with_space = 1;
-	//printf("str: %c end_with_sp: %d\n", str[i - 1], end_with_space);
 	i = 0;
 	while (after[count])
 		count++;
@@ -91,7 +90,6 @@ int	is_env_var(char *word, char	**var_name, char **value, char **env)
 	{
 		index_bef_eq = after_eq - word;
 		(*value) = ft_strtrim((after_eq + 1), "\'\"");
-		//printf("VALUE: %s\n", (*value));
 		(*value) = remove_spaces(ft_strdup(*value));
 		if ((*value) && (*value)[0] == '$')
 			(*value) = get_env_var((*value) + 1, env);

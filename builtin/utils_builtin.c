@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 17:48:15 by apaghera          #+#    #+#             */
-/*   Updated: 2023/06/28 11:09:01 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/16 20:29:46 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,18 @@ int	only_echo(t_cmds **cmds)
 		}
 	}
 	return (0);
+}
+
+int	if_is_exit(t_cmds *cmds, int flag, int *exit)
+{
+	int	i;
+
+	i = 0;
+	if (ft_memcmp(cmds->cmds[0], "exit", 5) == 0)
+	{
+		while (cmds->cmds[i])
+			i++;
+		flag = exit_format(i, cmds, flag, exit);
+	}
+	return (flag);
 }

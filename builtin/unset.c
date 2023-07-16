@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 11:27:05 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/13 12:41:52 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 21:17:28 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,6 @@
 #include "../include/control.h"
 
 extern char	**environ;
-int	EXIT_C;
-
-// void	print_env(char **envp)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (envp[i])
-// 	{
-// 		printf("ENVP[%i]: %s\n", i, envp[i]);
-// 		i++;
-// 	}
-// }
 
 int	unset(char ***envp, char *var_name)
 {
@@ -37,23 +24,7 @@ int	unset(char ***envp, char *var_name)
 	sucess = 0;
 	if (!var_name)
 		return (sucess);
-	while ((*envp)[i])
-	{
-		if (ft_strnstr((*envp)[i], var_name, ft_strlen(var_name)) == (*envp)[i])
-		{
-			free((*envp)[i]);
-			(*envp)[i] = (*envp)[i + 1];
-			i++;
-			while ((*envp)[i])
-			{
-				(*envp)[i] = (*envp)[i + 1];
-				i++;
-			}
-			sucess = 1;
-			break ;
-		}
-		i++;
-	}
+	sucess = unset_env_get(envp, var_name, sucess);
 	if (!sucess)
 		EXIT_C = 1;
 	return (sucess);
@@ -76,7 +47,8 @@ int	is_inside_env(char	**envp, char	*var_name, int count)
 	i = 0;
 	while (i < count)
 	{
-		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && *(envp[i] + ft_strlen(var_name)) == '=')
+		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && \
+				*(envp[i] + ft_strlen(var_name)) == '=')
 			return (1);
 		i++;
 	}
@@ -90,14 +62,15 @@ int	get_env_index(char	**envp, char	*var_name)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && ft_strncmp(envp[i] + ft_strlen(var_name), "=", 1) == 0)
+		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && \
+				ft_strncmp(envp[i] + ft_strlen(var_name), "=", 1) == 0)
 			return (i);
 		i++;
 	}
 	return (i);
 }
 
-int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
+int	set_env_var(char ***envp, char	*var_name, char *value)
 {
 	char	**new_envp;
 	int		i;
@@ -140,19 +113,4 @@ int	set_env_var(char ***envp, char	*var_name, char *value) //fix protection
 	free(*envp);
 	*envp = new_envp;
 	return (1);
-}
-
-
-char	*get_env_var(char *var_name, char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && ft_strncmp(envp[i] + ft_strlen(var_name), "=", 1) == 0)
-			return (ft_strchr(envp[i], '=') + 1);
-		i++;
-	}
-	return (NULL);
 }

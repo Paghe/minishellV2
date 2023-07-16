@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 21:51:59 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/16 20:07:38 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "include/control.h"
 
 extern char **environ;
+
 int EXIT_C;
 
 char	**copy_env(char **envp)
@@ -35,7 +36,7 @@ char	**copy_env(char **envp)
 	return (new_envp);
 }
 
-int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
+int	execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 {
 	int		i;
 	char	*var_name;
@@ -48,21 +49,7 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 	value = NULL;
 	exit = 0;
 	while (cmds[i])
-	{
-		//if (!cmds[i]->data.is_redir_first && ft_strlen(cmds[i]->cmds[0]) == 1 && *(cmds[i]->cmds[0]) == '.')
-		//{
-		//	ft_putendl_fd("minishell: .: filename argument required\n.: usage: . filename [arguments]", 2);
-		//	i++;
-		//	continue;
-		//}
-		//if (!cmds[i]->data.is_redir_first && is_env_var(cmds[i]->cmds[0], &var_name, &value) == 1)
-		//{
-		//	set_env_var(shell_env, var_name, value);
-		//	free(var_name);
-		//	free(value);
-		//}
-		//else
-		
+	{	
 		if (cmds[i]->cmds[0])
 		{
 			if (ft_strncmp(cmds[i]->cmds[0], "/bin/echo ", 10) == 0)
@@ -82,7 +69,7 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 					k++;
 				}
 				j = 1;
-				while(cmds[i]->cmds[j])
+				while (cmds[i]->cmds[j])
 				{
 					replaced_commands[k] = ft_strdup(cmds[i]->cmds[j]);
 					j++;
@@ -103,28 +90,12 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 	return (exit);
 }
 
-void	check_redir(t_cmds **cmds)
+int	execute(char **envp)
 {
-	int		i;
-
-	i = 0;
-	while (cmds[i])
-	{
-		/* if (cmds[i]->data.is_redir_first == 1)
-		{
-			free(cmds[i]->cmds);
-			cmds[i]->cmds[0] = NULL;
-		} */
-		i++;
-	}
-}
-
-int execute(char **envp)
-{
-	t_lexer lexer;
-	t_cmds **cmds;
-	char *input;
-	char **shell_env;
+	t_lexer	lexer;
+	t_cmds	**cmds;
+	char	*input;
+	char	**shell_env;
 	int		exit;
 
 	cmds = NULL;
@@ -140,9 +111,7 @@ int execute(char **envp)
 		else
 			input = ft_strtrim(get_next_line(STDIN_FILENO), "\n");
 		if (!input)
-		{
-			break;
-		}
+			break ;
 		if (input && input[0] == '\0')
 		{
 			free(input);
@@ -157,7 +126,6 @@ int execute(char **envp)
 		{
 			cmds = init_list_commands(lexer.tokens);
 			parse_tokens(lexer.tokens, cmds, envp);
-			//replace_env_vars(cmds, envp);
 			replace_env_vars(cmds, shell_env);
 			block_signals();
 			exit = execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens));
@@ -186,10 +154,7 @@ int	main(int argc, char **argv, char **envp)
 	env_vars = copy_env(envp);
 	(void)argc;
 	(void)argv;
-/* 	atexit(leaks); */
 	if ((execute(env_vars)) == -1)
 		EXIT_C = -1;
-	//EXIT_C = 0;
-	//printf("exit code: %i\n", EXIT_C);
 	return (EXIT_C);
 }

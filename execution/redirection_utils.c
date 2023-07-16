@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:19:33 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/11 19:02:58 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 21:24:28 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,15 @@ char	*get_env_path(char **envp, char *command)
 	if (!path)
 		return (NULL);
 	paths = ft_split(path + 5, ':');
-	if (ft_strrchr(command, '/') == ft_strchr(command, '/') && *command == '/' && !if_is_builtin(command))
+	if (ft_strrchr(command, '/') == ft_strchr(command, '/') && \
+			*command == '/' && !if_is_builtin(command))
 	{
 		free(path);
 		free_paths(paths);
-		return 	NULL;
+		return (NULL);
 	}
-	if (command && ft_strrchr(command, '/') && (ft_strrchr(command, '/') != ft_strchr(command, '/')))
+	if (command && ft_strrchr(command, '/') && \
+			(ft_strrchr(command, '/') != ft_strchr(command, '/')))
 		cmd = strrchr(command, '/') + 1;
 	else
 		cmd = command;
@@ -59,12 +61,12 @@ char	*get_env_path(char **envp, char *command)
 	while (paths[++i])
 	{
 		cmd_path = malloc(ft_strlen(paths[i]) + ft_strlen(cmd) + 2);
-		ft_strcpy(cmd_path, paths[i]); // Implement strcpy
-		ft_strcat(cmd_path, "/");	// Implement strcat
+		ft_strcpy(cmd_path, paths[i]);
+		ft_strcat(cmd_path, "/");
 		ft_strcat(cmd_path, cmd);
 		if (access(cmd_path, X_OK) == 0)
 		{
-			free_paths(paths); // free stuff looks above
+			free_paths(paths);
 			return (cmd_path);
 		}
 		free(cmd_path);
@@ -72,10 +74,11 @@ char	*get_env_path(char **envp, char *command)
 	free_paths(paths);
 	if (if_is_builtin(cmd))
 		return (ft_strdup(cmd));
-	return (NULL); // this way is way faster to allocate memory 
+	return (NULL);
 }
 
-t_redirection	fill_redirection_struct(char *command, char *filename, char **args, char **envp)
+t_redirection	fill_redirection_struct(char *command, char *filename, \
+												char **args, char **envp)
 {
 	t_redirection		red;
 	int					i;

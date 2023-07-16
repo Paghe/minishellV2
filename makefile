@@ -20,6 +20,7 @@ SRC = main.c \
 	parse/parse.c	\
 	parse/grammar.c	\
 	parse/utils_parse.c \
+	parse/utils_parse_two.c \
 	parse/init_parse.c \
 	control_commands/control.c \
 	execution/redirection_utils.c \
@@ -39,7 +40,7 @@ OBJ = $(SRC:.c=.o)
 LIBFT = ./libft/libft.a
 GNL = ./gnl/libgnl.a
 
-LINKFLAGS = -lreadline  -L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++ #-L$(shell brew --prefix readline)/lib
+LINKFLAGS = -lreadline  #-L/Users/apaghera/Documents/LeakSanitizer -llsan -lc++ #-L$(shell brew --prefix readline)/lib
 
 all: 
 	$(MAKE) $(NAME) -j

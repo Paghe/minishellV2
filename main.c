@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 17:38:54 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/15 21:51:59 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 				free(cmds[i]->cmds);
 				cmds[i]->cmds = replaced_commands;
 			}
-			
 			exit = pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
 		}
 		if (cmds[i]->data.env)
@@ -111,11 +110,11 @@ void	check_redir(t_cmds **cmds)
 	i = 0;
 	while (cmds[i])
 	{
-		if (cmds[i]->data.is_redir_first == 1)
+		/* if (cmds[i]->data.is_redir_first == 1)
 		{
 			free(cmds[i]->cmds);
 			cmds[i]->cmds[0] = NULL;
-		}
+		} */
 		i++;
 	}
 }

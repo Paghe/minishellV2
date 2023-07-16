@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 16:35:40 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 15:11:49 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 		/*printf("hello\n");*/
 		if ((*red)->data.input || (*red)->data.output)
 		{
-			(*red)->data.fd_in = open((*red)->data.input, O_RDONLY);
+			if (((*red)->data.fd_in = open((*red)->data.input, O_RDONLY)) < 0)
+			{
+				perror((*red)->data.input);
+				exit(exit_st);
+			}
 			if ((*red)->data.is_append)
 				(*red)->data.fd_out = open((*red)->data.output, O_WRONLY | O_APPEND | O_CREAT, 0644);
 			else
@@ -121,7 +125,12 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 	  
       if ((*red)->data.input || (*red)->data.output)
       {
-        (*red)->data.fd_in = open((*red)->data.input, O_RDONLY);
+		// printf("hellp\n");
+		if (((*red)->data.fd_in = open((*red)->data.input, O_RDONLY)) < 0)
+		{
+			perror((*red)->data.input);
+			exit(exit_st);
+		}
         if ((*red)->data.is_append)
           (*red)->data.fd_out = open((*red)->data.output, O_WRONLY | O_APPEND | O_CREAT, 0644);
         else

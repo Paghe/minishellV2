@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 15:08:29 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 15:17:40 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,7 @@ char	*escape_quote(char	*cmds)
 	while (cmds[i])
 	{
 		if (cmds[i] && (cmds[i] != '\"' && cmds[i] != '\''))
-		{
-			new_cmds[j] = cmds[i];
-			j++;
-		}
+			new_cmds[j++] = cmds[i];
 		i++;
 	}
 	new_cmds[j] = '\0';
@@ -60,20 +57,21 @@ void	no_quote(t_cmds *cmds)
 	}
 }
 
-int	count_commands(t_tokens	*tokens)
+t_token	*next_token(t_token *current)
 {
-	t_token	*current;
-	int		count;
-
-	count = 1;
-	current = tokens->front;
-	while (current)
+	if (current)
 	{
-		if (current->type == PIPE)
-			count++;
 		current = current->next;
+		return (current);
 	}
-	return (count);
+	return (current);
+}
+
+void	add_cmds_env(t_cmds **cmds, char **envp, int i, int *j)
+{
+	cmds[i]->data.env = get_env_path(envp, cmds[i]->cmds[0]);
+	(*j)++;
+	cmds[i]->cmds[*j] = NULL;
 }
 
 void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
@@ -81,90 +79,26 @@ void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp)
 	t_token	*current;
 	int		i;
 	int		j;
-	int		fd;
-	int		flag;
 
 	current = tokens->front;
 	i = 0;
 	j = 0;
-	flag = 1;
 	while (current)
 	{
-		if (current->type == PIPE)
-		{
-			flag = 0;
-			init_pipes(cmds, i);
-			i++;
-			current = current->next;
-			j = 0;
-		}
+		current = handle_pipes(current, cmds, &i, &j);
 		if (is_input_redirect(current))
+			current = handle_input(current, cmds, i);
+		else if (is_output_redirect(current))
+			current = handle_output(current, cmds, i);
+		else if (is_the_word(current) && \
+					ft_strcmp(cmds[i]->data.input, current->token))
 		{
-			if (current->type == DLESS)
-			{
-				current = current->next;
-				if (cmds[i]->data.input)
-					free(cmds[i]->data.input);
-				cmds[i]->data.input = ft_strdup("temp_file");
-				here_doc(current, cmds[i]);
-				if (current->next && is_the_word(current->next))
-					current = current->next;
-				else
-					break ;
-			}
-			if ((current->type == LESS) && (current->next && is_the_word(current->next)))
-			{
-				if (cmds[i]->data.input)
-					free(cmds[i]->data.input);
-				cmds[i]->data.input = ft_strdup(current->next->token);
-				if (current->next && is_the_word(current->next))
-					current = current->next;
-			}
-			if (flag == 1)
-				cmds[i]->data.is_redir_first = 1;
-		}
-		if (is_output_redirect(current))
-		{
-			if (flag == 1)
-				cmds[i]->data.is_redir_first = 1;
-			if (current->type == DMORE)
-				cmds[i]->data.is_append = 1;
-			if (current->next && is_the_word(current->next))
-			{
-				if (cmds[i]->data.output)
-					free(cmds[i]->data.output);
-				cmds[i]->data.output = ft_strdup(current->next->token);
-				if (cmds[i]->data.is_append)
-					fd = open(current->next->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
-				else
-					fd = open(current->next->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				close(fd);
-				current = current->next;
-				if (current->next && is_the_word(current->next))
-					cmds[i]->data.exist = 1;
-			}
+			create_commands(cmds, current, i, j);
+			add_cmds_env(cmds, envp, i, &j);
+			current = next_token(current);
 		}
 		else
-		{
-			flag = 0;
-			if (cmds[i]->data.env)
-				free(cmds[i]->data.env);
-			cmds[i]->cmds[j] = ft_strdup(current->token);
-			cmds[i]->data.exist = 1;
-			char *tmp = ft_strtrim(cmds[i]->cmds[0], "\"");
-			if (cmds[i]->cmds[0])
-				free(cmds[i]->cmds[0]);
-			cmds[i]->cmds[0] = ft_strdup(tmp);
-			free(tmp);
-			cmds[i]->data.env = get_env_path(envp, cmds[i]->cmds[0]);
-			j++;
-			cmds[i]->cmds[j] = NULL;
-		}
-		if (current)
-		{
-			flag = 0;
-			current = current->next;
-		}
+			current = next_token(current);
 	}
 }
 
@@ -180,9 +114,9 @@ char	*replace_var(char *var)
 	while (curr && next && *curr && *next)
 	{
 		if (*prev == '\"' && *curr == '$' && *next == '\"')
-			*curr =  17;
+			*curr = 17;
 		else if (*prev == '\'' && *curr == '$' && *next == '\'')
-			*curr =  17;
+			*curr = 17;
 		prev = curr;
 		curr = next;
 		next++;
@@ -197,7 +131,7 @@ char	*put_dollar_back(char *str)
 	i = 0;
 	while (str && str[i])
 	{
-		if (str[i] ==  17)
+		if (str[i] == 17)
 			str[i] = '$';
 		i++;
 	}
@@ -206,11 +140,11 @@ char	*put_dollar_back(char *str)
 
 char	*next_dollar(char *str)
 {
-	int	i;
-	int	is_code_var;
+	int		i;
+	int		is_code_var;
 	char	*new_var;
 	char	*tmp;
-	
+
 	i = -1;
 	is_code_var = 0;
 	while (str && str[++i])
@@ -218,7 +152,7 @@ char	*next_dollar(char *str)
 		if (str[i] == '$' && str[i + 1] && str[i + 1] == '?')
 		{
 			is_code_var = 1;
-			break;
+			break ;
 		}
 	}
 	new_var = ft_strdup2(str, i);
@@ -226,8 +160,6 @@ char	*next_dollar(char *str)
 	if (is_code_var)
 	{
 		new_var = ft_strjoin(tmp, ft_itoa(EXIT_C));
-		//printf("NEW VAR2: %shello STR2: %s\n", new_var, str + i + 2);
-		//tmp = new_var;
 		new_var = ft_strjoin(tmp, str + 3);
 		free(tmp);
 	}
@@ -358,37 +290,4 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 		}
 		i++;
 	}
-}
-
-void	free_parse(t_cmds **cmds)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (cmds[i])
-	{
-		j = 0;
-		//if (cmds[i]->data.is_redir_first)
-		//{
-		//	i++;
-		//	continue;
-		//}
-		while (cmds[i]->cmds && cmds[i]->cmds[j])
-		{
-			if (cmds[i]->data.exist)
-				free(cmds[i]->cmds[j]);
-			j++;
-		}
-		if (cmds[i]->cmds)
-			free(cmds[i]->cmds);
-		if (cmds[i]->data.input)
-			free(cmds[i]->data.input);
-		if (cmds[i]->data.output)
-			free(cmds[i]->data.output);
-		free(cmds[i]);
-		i++;
-	}
-	free(cmds);
 }

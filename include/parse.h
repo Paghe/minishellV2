@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 16:14:52 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 16:06:24 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define READ_END 0
 # define WRITE_END 1
 
-extern int EXIT_C;
+extern	int	EXIT_C;
 
 typedef struct s_data
 {
@@ -43,6 +43,7 @@ typedef struct s_cmds
 {
 	char	**cmds;
 	t_data	data;
+	int		flag;
 }	t_cmds;
 
 char	*escape_quote(char	*cmds);
@@ -52,6 +53,10 @@ int		check_first_token(t_token	*token);
 int		not_correct_pos(t_token *current);
 int		get_grammar(t_tokens *tokens);
 int		is_word(t_token *token);
+t_token	*handle_input(t_token *current, t_cmds **cmds, int i);
+t_token	*handle_output(t_token *current, t_cmds **cmds, int i);
+void	create_commands(t_cmds **cmds, t_token *current, int i, int j);
+t_token	*handle_pipes(t_token *current, t_cmds **cmds, int *i, int *j);
 void	parse_tokens(t_tokens *tokens, t_cmds **cmds, char **envp);
 int		is_input_redirect(t_token *token);
 int		is_output_redirect(t_token *token);

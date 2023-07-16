@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 21:49:08 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/04 17:36:21 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/15 20:11:10 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,20 @@ int	not_correct_pos(t_token *current)
 		return (0);
 	}
 	return (1);
+}
+
+int	count_commands(t_tokens	*tokens)
+{
+	t_token	*current;
+	int		count;
+
+	count = 1;
+	current = tokens->front;
+	while (current)
+	{
+		if (current->type == PIPE)
+			count++;
+		current = current->next;
+	}
+	return (count);
 }

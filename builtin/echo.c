@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 14:27:24 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/14 19:14:37 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 16:03:36 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,13 @@ void	echo_newline(t_cmds **cmds)
 	echo_with_arg(cmds, no_newline, i);
 }
 
-int echo(t_cmds *cmds)
+int	echo(t_cmds *cmds)
 {
-    if (!ft_strncmp(cmds[0].cmds[0], "/bin/echo", 10))
-    {
-        free(cmds[0].cmds[0]);
-        cmds[0].cmds[0] = ft_strdup("echo");
-    }
-    echo_newline(&cmds);
-    return (1);
+	if (!ft_strncmp(cmds[0].cmds[0], "/bin/echo", 10))
+	{
+		free(cmds[0].cmds[0]);
+		cmds[0].cmds[0] = ft_strdup("echo");
+	}
+	echo_newline(&cmds);
+	return (1);
 }

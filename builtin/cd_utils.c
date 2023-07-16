@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apaghera <apaghera@student.42heilbronn.de> +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 17:04:46 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/06 18:45:52 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/16 15:58:30 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,8 @@ char	*go_home(char **env)
 int	pwd_goes_void(char **env, t_cmds *cmds)
 {
 	char	*dir;
-	int		i;
 	int		is_void;
 
-	i = 1;
 	dir = NULL;
 	is_void = 0;
 	dir = getcwd(NULL, 0);

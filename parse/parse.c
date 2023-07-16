@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 19:59:22 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 20:51:19 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 21:31:06 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,6 +339,11 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 							if (tmp_final)
 								free(tmp_final);
 						}
+						else
+						{
+							if (new_val)
+								free(new_val);
+						}
 						if (variable)
 							free(variable);
 						if (tmp_commands)
@@ -347,8 +352,6 @@ void	replace_env_vars(t_cmds **cmds, char **envp)
 						tmp_commands = cmds[i]->cmds[j];
 						k = 0;
 					}
-					if (new_val)
-						free(new_val);
 					if (final)
 						free(final);
 				}
@@ -371,11 +374,6 @@ void	free_parse(t_cmds **cmds)
 	while (cmds[i])
 	{
 		j = 0;
-		//if (cmds[i]->data.is_redir_first)
-		//{
-		//	i++;
-		//	continue;
-		//}
 		while (cmds[i]->cmds && cmds[i]->cmds[j])
 		{
 			if (cmds[i]->data.exist)
@@ -384,6 +382,8 @@ void	free_parse(t_cmds **cmds)
 		}
 		if (cmds[i]->cmds)
 			free(cmds[i]->cmds);
+		if (cmds[i]->data.env)
+			free(cmds[i]->data.env);
 		if (cmds[i]->data.input)
 			free(cmds[i]->data.input);
 		if (cmds[i]->data.output)
@@ -391,5 +391,4 @@ void	free_parse(t_cmds **cmds)
 		free(cmds[i]);
 		i++;
 	}
-	free(cmds);
 }

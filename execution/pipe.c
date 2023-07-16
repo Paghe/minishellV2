@@ -6,14 +6,13 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 21:23:18 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 23:07:48 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/parse.h"
 
 extern char	**environ;
-int EXIT_C;
 
 int	init_pipes(t_cmds **cmds, int index)
 {
@@ -42,15 +41,53 @@ void	close_all(t_cmds **cmds)
 	}
 }
 
-int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env)
+void	free_everything(t_cmds **red, char ***envp, char ***shell_env, t_tokens *tokens)
+{
+	free_env(*envp);
+	free_env(*shell_env);
+	free_parse(red);
+	destroy_tokens(tokens);
+}
+
+int	wait_process(int last_pid, int last)
+{
+	int	exit;
+	int	status;
+	int	e_code;
+
+	exit = 0;
+	e_code = 0;
+	while (exit != -1)
+	{
+		exit = waitpid(-1, &status, 0);
+		if (exit == last_pid)
+			e_code = WEXITSTATUS(status);
+	}
+	if (last != -2)
+	{
+		EXIT_C = e_code;
+		if (e_code == 255)
+			EXIT_C = 127;
+		if (e_code == 126)
+			EXIT_C = 126;
+		if (e_code == 1)
+			EXIT_C = 1;
+		if (e_code == 0)
+			EXIT_C = 0;
+	}
+	if (last == -1 || last == -2)
+		return (1);
+	else
+		return (0);
+}
+
+int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env, t_tokens *tokens)
 {
 	int	pid;
-	int	status;
 	int	exit_st;
 	int	stdin_terminal;
 	int	stdout_terminal;
 
-	(void)all;
 	exit_st = 0;
 	if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]) && n_commands ==  1)
 	{
@@ -67,8 +104,7 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 		}
 		EXIT_C = 0;
 		built_in(*red, envp, shell_env, &exit_st);
-		dup2(stdout_terminal, STDOUT_FILENO);
-		dup2(stdin_terminal, STDIN_FILENO);
+		redirect_io(stdin_terminal, stdout_terminal); 
 		if ((*red)->data.pipe_in != -1)
 			close((*red)->data.pipe_in);
 		if ((*red)->data.pipe_out != -1)
@@ -93,22 +129,18 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 			else
 				(*red)->data.fd_out = open((*red)->data.output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			redirect_io((*red)->data.fd_in, (*red)->data.fd_out);
-			close((*red)->data.fd_in);
-			close((*red)->data.fd_out);
 		}
 		built_in(*red, envp, shell_env, &exit_st);
-		free_env(*envp);
-		free_env(*shell_env);
+		free_everything(red, envp, shell_env, tokens);
 		exit(exit_st);
     }
     else
     {
 		if ((*red)->data.pipe_in != -1)
-        dup2((*red)->data.pipe_in, READ_END);
-      if ((*red)->data.pipe_out != -1)
-        dup2((*red)->data.pipe_out, WRITE_END);
-      close_all(all);
-	  
+			dup2((*red)->data.pipe_in, READ_END);
+		if ((*red)->data.pipe_out != -1)
+			dup2((*red)->data.pipe_out, WRITE_END);
+		close_all(all);
       if ((*red)->data.input || (*red)->data.output)
       {
         (*red)->data.fd_in = open((*red)->data.input, O_RDONLY);
@@ -117,8 +149,6 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
         else
           (*red)->data.fd_out = open((*red)->data.output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         redirect_io((*red)->data.fd_in, (*red)->data.fd_out);
-        close((*red)->data.fd_in);
-        close((*red)->data.fd_out);
       }
 		if ((*red)->cmds)
 			(*red)->cmds = escape_quotes_cmds((*red)->cmds);
@@ -143,7 +173,11 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 					free(tmp);
 					free(tmp2);
 					if (!access((*red)->cmds[0] + 2, F_OK) && access((*red)->cmds[0] + 2, X_OK) != 0)
+					{
+						free_everything(red, envp, shell_env, tokens);
 						exit (126);
+					}
+					free_everything(red, envp, shell_env, tokens);
 					exit(-1);
 				}
 			}
@@ -158,6 +192,7 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 					ft_putendl_fd(tmp2, 2);
 					free(tmp);
 					free(tmp2);
+					free_everything(red, envp, shell_env, tokens);
 					exit(-1);
 				}
 			}
@@ -171,17 +206,5 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 		close((*red)->data.fd_in);
 	if ((*red)->data.fd_out != -1)
 		close((*red)->data.fd_out);
-	waitpid(pid, &status, 0);
-	if (WEXITSTATUS(status) == 255)
-		EXIT_C = 127;
-	if (WEXITSTATUS(status) == 126)
-		EXIT_C = 126;
-	if (WEXITSTATUS(status) == 1)
-		EXIT_C = 1;
-	if (WEXITSTATUS(status) == 0)
-		EXIT_C = 0;
-	if (WEXITSTATUS(status) == 15)
-		return (15);
-	else
-		return (0);
+	return (pid);
 }

@@ -1,5 +1,9 @@
-FLAGS = -Wall -Wextra -Werror #-I $(shell brew --prefix readline)/include
-#FLAGS += -g -fsanitize=address 
+FLAGS = -Wall -Wextra -Werror -g#-I $(shell brew --prefix readline)/include
+ifdef DEBUG 
+FLAGS += -g -fsanitize=leak
+else
+# FLAGS += -g -fsanitize=address
+endif
 
 NAME = minishell
 
@@ -39,7 +43,12 @@ OBJ = $(SRC:.c=.o)
 LIBFT = ./libft/libft.a
 GNL = ./gnl/libgnl.a
 
-LINKFLAGS = -lreadline #-L/Users/crepou/Documents/LeakSanitizer -llsan -lc++ #-L$(shell brew --prefix readline)/lib
+LINKFLAGS = -lreadline #-g -L/Users/crepou/Documents/LeakSanitizer  #-fsanitize=leak#-L/Users/crepou/Documents/LeakSanitizer -llsan -lc++ #-L$(shell brew --prefix readline)/lib
+ifdef DEBUG
+LINKFLAGS += -g -fsanitize=leak
+else
+# LINKFLAGS += -g -fsanitize=address
+endif
 
 all: 
 	$(MAKE) $(NAME) -j
@@ -49,6 +58,7 @@ all:
 
 $(NAME): $(OBJ) include/lexer.h
 	make -C libft
+	make -C gnl
 	gcc  $(OBJ) $(LIBFT) $(GNL) -o $(NAME) $(LINKFLAGS) $(FLAGS) 
 clean:
 	rm -f $(OBJ)
@@ -58,6 +68,7 @@ clean:
 fclean:
 	make clean
 	rm -f $(NAME)
+	$(MAKE) -C gnl fclean
 	rm -f $(LIBFT)
 
 test:

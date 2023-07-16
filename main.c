@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 20:21:13 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 23:04:00 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,17 @@ void	free_after_split(char **str)
 		free(str);
 }
 
-int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
+int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands, t_tokens *tokens)
 {
 	int		i;
-	char	*var_name;
-	char	*value;
 	int		exit;
+	int		last_pid;
+	int		prev_pid;
 
-	(void)n_commands;
 	i = 0;
-	var_name = NULL;
-	value = NULL;
 	exit = 0;
+	last_pid = 0;
+	prev_pid = 0;
 	while (cmds[i])
 	{
 		if (cmds[i]->cmds[0])
@@ -97,14 +96,21 @@ int execute_cmds(t_cmds **cmds, char ***envp, char ***shell_env, int n_commands)
 				free_after_split(cmds[i]->cmds);
 				cmds[i]->cmds = replaced_commands;
 			}
-			exit = pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env);
+			last_pid = pipe_proccess(&cmds[i], envp, cmds, n_commands, shell_env, tokens);
+			if (last_pid != -1 && last_pid != -2)
+				prev_pid = last_pid;
 		}
 		if (cmds[i]->data.env)
+		{
 			free(cmds[i]->data.env);
+			cmds[i]->data.env = NULL;
+		}
 		i++;
-		if (exit == 15)
+		if (last_pid == -1 || last_pid == -2)
 			break ;
 	}
+	// wait here
+	exit = wait_process(prev_pid, last_pid);
 	return (exit);
 }
 
@@ -115,11 +121,11 @@ void	check_redir(t_cmds **cmds)
 	i = 0;
 	while (cmds[i])
 	{
-		if (cmds[i]->data.is_redir_first == 1)
-		{
-			free(cmds[i]->cmds);
-			cmds[i]->cmds[0] = NULL;
-		}
+		//if (cmds[i]->data.is_redir_first == 1)
+		//{
+		//	free(cmds[i]->cmds);
+		//	cmds[i]->cmds[0] = NULL;
+		//}
 		i++;
 	}
 }
@@ -143,7 +149,16 @@ int execute(char **envp)
 		if (isatty(STDIN_FILENO))
 			input = readline("minishell 🚀 ");
 		else
-			input = ft_strtrim(get_next_line(STDIN_FILENO), "\n");
+		{
+			input = get_next_line(STDIN_FILENO);
+			if (!input)
+				break ;
+			char	*trimmed = ft_strtrim(input, "\n");
+			free(input);
+			if (!trimmed)
+				break ;
+			input = trimmed;
+		}
 		if (!input)
 		{
 			break;
@@ -165,8 +180,9 @@ int execute(char **envp)
 			//replace_env_vars(cmds, envp);
 			replace_env_vars(cmds, shell_env);
 			block_signals();
-			exit = execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens));
+			exit = execute_cmds(cmds, &envp, &shell_env, count_commands(lexer.tokens), lexer.tokens);
 			free_parse(cmds);
+			free(cmds);
 		}
 		destroy_tokens(lexer.tokens);
 		if (exit)

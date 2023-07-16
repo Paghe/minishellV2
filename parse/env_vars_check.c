@@ -6,14 +6,12 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 13:12:06 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 16:19:20 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 18:33:10 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/control.h"
 #include "../include/parse.h"
-
-int	EXIT_C;
 
 //int	quotes_around_dollar(char )
 
@@ -64,15 +62,12 @@ char	*next_var(char *str, char	*real_str, int *i)
 {
 	char	quote_type;
 	char	*new_var;
-	int		has_dollar;
 
 	quote_type = 17;
-	has_dollar = 0;
 	if (real_str && *real_str && (*real_str == '\"' || *real_str == '\'' || *real_str == '$'))
 	{
 		if (real_str && *real_str && *real_str == '$')
 		{
-			has_dollar = 1;
 			(real_str)++;
 			(*i)++;
 		}
@@ -135,44 +130,46 @@ char	*next_var(char *str, char	*real_str, int *i)
 char	*get_next_var(char *var, char **envp)
 {
 	char	**start;
-	char	*tmp;
 	char	*final;
 	int		i;
-	int		is_var;
 
-	is_var = 0;
 	if (!var)
 		return (NULL);
-	if (*var == '$')
-		is_var = 1;
-	else
+	if (*var != '$')
 		return (NULL);
-	//next_var(var, &var);
 	start = ft_split(var, '$');
 	i = 0;
-	tmp = NULL;
 	final = NULL;
 	while (start[i])
 	{
 		if (start[i][0] ==  '?')
-			final = ft_strjoin(final, ft_itoa(EXIT_C));
+		{
+			char	*num_tmp = ft_itoa(EXIT_C);
+			char *tmp2 = NULL;
+			tmp2 = ft_strjoin(final, num_tmp);
+			free(final);
+			final = ft_strdup(tmp2);
+			free(tmp2);
+			free(num_tmp);
+		}
 		else if (start[i][0] != '\"' && start[i][0] != '\'')
 		{
-			final = ft_strjoin(final, get_env_var(start[i], envp));
-			if (tmp)
-				free(tmp);
-			tmp = final;
+			char *tmp2 = NULL;
+			tmp2 =  ft_strjoin(final, get_env_var(start[i], envp));
+			free(final);
+			final = ft_strdup(tmp2);
+			free(tmp2);
 		}
 		else
 		{
-			//printf("VAR: %s COUNT: %i NEW_STR: %s\n", start[i], count_char_in_word(start[i], '\"'), remove_char_from_word(start[i], '\"'));
+			char *tmp2 = NULL;
 			char *after_trim = remove_char_from_word(start[i], '\"');
-			final = ft_strjoin(final, after_trim);
+			tmp2 = ft_strjoin(final, after_trim);
+			free(final);
+			final = ft_strdup(tmp2);
+			free(tmp2);
 			final = put_dollar_back(final);
 			free(after_trim);
-			if (tmp)
-				free(tmp);
-			tmp = final;
 		}
 		free(start[i]);
 		i++;

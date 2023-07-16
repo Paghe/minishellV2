@@ -51,13 +51,13 @@ OBJS = $(SRCS:.c=.o)
 
 OBJSB = $(SRCSB:.c=.o)
 
-CC = clang
+CC = cc
 
 CC_FLAGS = -Wall -Wextra -Werror
 
 %.o : %.c libft.h
 	@echo "Compiling: $<"
-	@clang $(CC_FLAGS) -c $< -o $@
+	@$(CC) $(CC_FLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
 	@ar r $(NAME) $(OBJS)

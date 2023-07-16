@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 22:19:33 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 19:28:16 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 18:46:52 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,29 +80,4 @@ char	*get_env_path(char **envp, char *command)
 	if (if_is_builtin(cmd))
 		return (ft_strdup(cmd));
 	return (NULL); // this way is way faster to allocate memory 
-}
-
-t_redirection	fill_redirection_struct(char *command, char *filename, char **args, char **envp)
-{
-	t_redirection		red;
-	int					i;
-	const char			*env[2];
-
-	red.filename = filename;
-	i = 0;
-	while (args[i])
-		i++;
-	red.args = (const char **)malloc(sizeof(const char *) * (i + 2));
-	red.args[0] = get_env_path(envp, command);
-	i = 0;
-	while (args[i])
-	{
-		red.args[i + 1] = ft_strdup(args[i]);
-		i++;
-	}
-	red.args[i + 1] = NULL;
-	env[0] = red.args[0];
-	env[1] = NULL;
-	red.envp = env;
-	return (red);
 }

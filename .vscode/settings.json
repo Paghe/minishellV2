@@ -1,5 +1,8 @@
 {
 	"files.associations": {
-		"complex": "c"
+		"complex": "c",
+		"control.h": "c",
+		"get_next_line.h": "c",
+		"parse.h": "c"
 	}
 }

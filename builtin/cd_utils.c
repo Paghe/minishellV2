@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 17:04:46 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 18:40:25 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 18:29:50 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,8 @@ char	*go_home(char **env)
 int	pwd_goes_void(char **env, t_cmds *cmds)
 {
 	char	*dir;
-	int		i;
 	int		is_void;
 
-	i = 1;
 	dir = NULL;
 	is_void = 0;
 	dir = getcwd(NULL, 0);

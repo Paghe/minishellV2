@@ -6,7 +6,7 @@
 /*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/15 16:14:52 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/16 22:47:12 by crepou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	redirect_io(int input, int output);
 int		begin_with_pipes(t_token *token);
 int		init_pipes(t_cmds **cmds, int index);
 void	close_all(t_cmds **cmds);
-int		pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env);
+int		pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env, t_tokens *tokens);
 int		is_env_var(char *word, char	**var_name, char **value, char **env);
 char	*get_env_var(char *var_name, char **envp);
 void	replace_env_vars(t_cmds **cmds, char **envp);
@@ -98,5 +98,7 @@ char	*get_next_var(char *var, char **envp);
 char	*remove_char_from_word(char *str, char c);
 char	*put_dollar_back(char *str);
 char	*next_var(char *str, char	*real_str, int *i);
+void	free_after_split(char **str);
+int		wait_process(int last_pid, int last);
 
 #endif

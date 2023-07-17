@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/16 23:07:48 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/17 15:01:14 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,26 @@ void	close_all(t_cmds **cmds)
 	}
 }
 
-void	free_everything(t_cmds **red, char ***envp, char ***shell_env, t_tokens *tokens)
+void	free_everything(t_cmds **red, char ***envp, \
+							char ***shell_env, t_tokens *tokens)
 {
 	free_env(*envp);
 	free_env(*shell_env);
 	free_parse(red);
 	destroy_tokens(tokens);
 }
-
+void	value_exit(int e_code)
+{
+	EXIT_C = e_code;
+	if (e_code == 255)
+		EXIT_C = 127;
+	if (e_code == 126)
+		EXIT_C = 126;
+	if (e_code == 1)
+		EXIT_C = 1;
+	if (e_code == 0)
+		EXIT_C = 0;
+}
 int	wait_process(int last_pid, int last)
 {
 	int	exit;
@@ -64,24 +76,14 @@ int	wait_process(int last_pid, int last)
 			e_code = WEXITSTATUS(status);
 	}
 	if (last != -2)
-	{
-		EXIT_C = e_code;
-		if (e_code == 255)
-			EXIT_C = 127;
-		if (e_code == 126)
-			EXIT_C = 126;
-		if (e_code == 1)
-			EXIT_C = 1;
-		if (e_code == 0)
-			EXIT_C = 0;
-	}
+		value_exit(e_code);
 	if (last == -1 || last == -2)
 		return (1);
 	else
 		return (0);
 }
 
-int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, char ***shell_env, t_tokens *tokens)
+int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all, int n_commands, char ***shell_env, t_tokens *tokens)
 {
 	int	pid;
 	int	exit_st;

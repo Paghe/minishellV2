@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 21:49:01 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/16 15:11:49 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/17 14:50:49 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,20 +83,8 @@ int	pipe_proccess(t_cmds **red, char ***envp, t_cmds **all , int n_commands, cha
 	}
 	if (pid == 0)
 	{
-		//if (!(*red)->data.is_redir_first && (*red)->data.env == NULL)
-		//  {
-		//	char *tmp;
-		//	char *tmp2;
-		//	tmp = ft_strjoin("minishell: ",(*red)->cmds[0]);
-		//	tmp2 = ft_strjoin(tmp, ": No such file or directory");
-		//	ft_putendl_fd(tmp2, 2);
-		//	free(tmp);
-		//	free(tmp2);
-		//	exit_st(0);
-		//  }
     if ((*red)->data.exist && if_is_builtin((*red)->cmds[0]))
     {
-		/*printf("hello\n");*/
 		if ((*red)->data.input || (*red)->data.output)
 		{
 			if (((*red)->data.fd_in = open((*red)->data.input, O_RDONLY)) < 0)

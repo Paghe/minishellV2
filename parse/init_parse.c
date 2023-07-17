@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 14:34:12 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/17 13:58:41 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/17 14:12:26 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ t_cmds	**init_list_commands(t_tokens *tokens, t_cmds **cmds)
 	t_token	*current;
 	int		j;
 	int		total_commands;
-
 
 	i = -1;
 	j = 0;

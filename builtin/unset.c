@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 11:27:05 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/16 21:17:28 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/17 16:10:51 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,6 @@
 #include "../include/control.h"
 
 extern char	**environ;
-
-int	unset(char ***envp, char *var_name)
-{
-	int	i;
-	int	sucess;
-
-	i = 0;
-	sucess = 0;
-	if (!var_name)
-		return (sucess);
-	sucess = unset_env_get(envp, var_name, sucess);
-	if (!sucess)
-		EXIT_C = 1;
-	return (sucess);
-}
-
-int	count_env_vars(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i] != NULL)
-		i++;
-	return (i);
-}
-
-int	is_inside_env(char	**envp, char	*var_name, int count)
-{
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		if (ft_strncmp(envp[i], var_name, ft_strlen(var_name)) == 0 && \
-				*(envp[i] + ft_strlen(var_name)) == '=')
-			return (1);
-		i++;
-	}
-	return (0);
-}
 
 int	get_env_index(char	**envp, char	*var_name)
 {
@@ -70,6 +30,42 @@ int	get_env_index(char	**envp, char	*var_name)
 	return (i);
 }
 
+char	**envp_memory_alloc(char ***envp, char *var_name, int count)
+{
+	char	**new_envp;
+
+	new_envp = NULL;
+	if (is_inside_env(*envp, var_name, count))
+		new_envp = (char **)malloc(sizeof(char *) * (count + 1));
+	else
+		new_envp = (char **)malloc(sizeof(char *) * (count + 2));
+	return (new_envp);
+}
+
+char	**get_new_env(char **new_envp, char ***envp, int *i, int count)
+{
+	while (*i < count)
+	{
+		new_envp[*i] = ft_strdup((*envp)[*i]);
+		free((*envp)[*i]);
+		(*i)++;
+	}
+	return (new_envp);
+}
+
+char	**get_inside_env(char **new_envp, char *var_name, char *value, int j)
+{
+	char	*temp;
+
+	temp = NULL;
+	j = get_env_index(new_envp, var_name);
+	free(new_envp[j]);
+	temp = ft_strjoin(var_name, "=");
+	new_envp[j] = ft_strjoin(temp, value);
+	free(temp);
+	return (new_envp);
+}
+
 int	set_env_var(char ***envp, char	*var_name, char *value)
 {
 	char	**new_envp;
@@ -81,33 +77,17 @@ int	set_env_var(char ***envp, char	*var_name, char *value)
 	i = 0;
 	j = 0;
 	count = count_env_vars(*envp);
-	if (is_inside_env(*envp, var_name, count))
-		new_envp = (char **)malloc(sizeof(char *) * (count + 1));
-	else
-		new_envp = (char **)malloc(sizeof(char *) * (count + 2));
+	new_envp = envp_memory_alloc(envp, var_name, count);
 	if (!new_envp)
 		return (0);
-	while (i < count)
-	{
-		new_envp[i] = ft_strdup((*envp)[i]);
-		free((*envp)[i]);
-		i++;
-		j++;
-	}
+	new_envp = get_new_env(new_envp, envp, &i, count);
 	if (is_inside_env(new_envp, var_name, count))
-	{
-		j = get_env_index(new_envp, var_name);
-		free(new_envp[j]);
-		temp = ft_strjoin(var_name, "=");
-		new_envp[j] = ft_strjoin(temp, value);
-		free(temp);
-	}
+		new_envp = get_inside_env(new_envp, var_name, value, j);
 	else
 	{
 		temp = ft_strjoin(var_name, "=");
-		new_envp[i] = ft_strjoin(temp, value);
+		new_envp[i++] = ft_strjoin(temp, value);
 		free(temp);
-		i++;
 	}
 	new_envp[i] = NULL;
 	free(*envp);

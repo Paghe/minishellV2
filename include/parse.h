@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/17 13:41:44 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/17 16:11:42 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ char	*get_env_var(char *var_name, char **envp);
 void	replace_env_vars(t_cmds **cmds, char **envp);
 int		count_dollars(char *word);
 char	**escape_quotes_cmds(char **cmds);
+int		is_inside_env(char	**envp, char *var_name, int count);
 int		unset(char ***envp, char *var_name);
 void	print_env(char **envp);
 int		set_env_var(char ***envp, char	*var_name, char *value);

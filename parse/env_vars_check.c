@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_vars_check.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crepou <crepou@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 13:12:06 by crepou            #+#    #+#             */
-/*   Updated: 2023/07/15 16:19:20 by crepou           ###   ########.fr       */
+/*   Updated: 2023/07/17 16:26:25 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "../include/parse.h"
 
 int	EXIT_C;
-
-//int	quotes_around_dollar(char )
 
 int	count_char_in_word(char *str, char c)
 {
@@ -92,9 +90,8 @@ char	*next_var(char *str, char	*real_str, int *i)
 		{
 			while (real_str && *real_str && *real_str != quote_type)
 			{
-			//	if (quote_type == '\'')
 				(real_str)++;
-				(*i)++;	
+				(*i)++;
 			}
 		}
 		else
@@ -108,7 +105,7 @@ char	*next_var(char *str, char	*real_str, int *i)
 					break ;
 				}
 				(real_str)++;
-				(*i)++;	
+				(*i)++;
 			}
 		}
 		(*i)++;
@@ -119,12 +116,12 @@ char	*next_var(char *str, char	*real_str, int *i)
 		{
 			if (*real_str == '\"' || *real_str == '\'' || *real_str == '$')
 			{
-					(*i)--;
-					(real_str)--;
-					break ;
+				(*i)--;
+				(real_str)--;
+				break ;
 			}
 			(real_str)++;
-			(*i)++;	
+			(*i)++;
 		}
 		(*i)++;
 	}
@@ -147,14 +144,13 @@ char	*get_next_var(char *var, char **envp)
 		is_var = 1;
 	else
 		return (NULL);
-	//next_var(var, &var);
 	start = ft_split(var, '$');
 	i = 0;
 	tmp = NULL;
 	final = NULL;
 	while (start[i])
 	{
-		if (start[i][0] ==  '?')
+		if (start[i][0] == '?')
 			final = ft_strjoin(final, ft_itoa(EXIT_C));
 		else if (start[i][0] != '\"' && start[i][0] != '\'')
 		{
@@ -165,7 +161,6 @@ char	*get_next_var(char *var, char **envp)
 		}
 		else
 		{
-			//printf("VAR: %s COUNT: %i NEW_STR: %s\n", start[i], count_char_in_word(start[i], '\"'), remove_char_from_word(start[i], '\"'));
 			char *after_trim = remove_char_from_word(start[i], '\"');
 			final = ft_strjoin(final, after_trim);
 			final = put_dollar_back(final);

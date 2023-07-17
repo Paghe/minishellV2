@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/05 19:17:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/16 21:22:42 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/17 13:41:44 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int		is_input_redirect(t_token *token);
 int		is_output_redirect(t_token *token);
 int		is_the_word(t_token *token);
 int		count_commands(t_tokens	*tokens);
-t_cmds	**init_list_commands(t_tokens *tokens);
+t_cmds	**init_list_commands(t_tokens *tokens, t_cmds **cmds);
 void	free_parse(t_cmds **cmds);
 void	input_redirection(t_cmds **red, char **envp);
 void	output_redirection_renew(t_cmds **red, char **envp);

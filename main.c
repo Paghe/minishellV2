@@ -6,7 +6,7 @@
 /*   By: apaghera <apaghera@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 19:35:49 by apaghera          #+#    #+#             */
-/*   Updated: 2023/07/16 20:07:38 by apaghera         ###   ########.fr       */
+/*   Updated: 2023/07/17 13:41:13 by apaghera         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int	execute(char **envp)
 			EXIT_C = 2;
 		else
 		{
-			cmds = init_list_commands(lexer.tokens);
+			cmds = init_list_commands(lexer.tokens, cmds);
 			parse_tokens(lexer.tokens, cmds, envp);
 			replace_env_vars(cmds, shell_env);
 			block_signals();
